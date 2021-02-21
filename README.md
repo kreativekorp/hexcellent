@@ -11,4 +11,6 @@ I went looking for a (graphical) hex editor on Linux. After trying several (GHex
 
 I had had enough of everything I tried not getting the basics right and decided to do what I always do in these situations: write my own. I had in fact already written one years ago, inspired by an old Macintosh program called HexEdit, as part of a project called Resplendence. So I took a look at my decade-old code, said "what a mess," started over, and rewrote it as a standalone application.
 
+![](wiki/screenshot.png)
+
 Be hexcellent to each other.
