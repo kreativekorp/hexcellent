@@ -21,7 +21,7 @@ bin: src
 
 doc: src
 	mkdir -p doc
-	javadoc -sourcepath src $(PACKAGES) -d doc
+	javadoc -classpath dep/orange-extensions.jar -sourcepath src $(PACKAGES) -d doc
 
 hexcellent.jar: bin
 	export COPYFILE_DISABLE=true
