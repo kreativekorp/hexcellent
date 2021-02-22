@@ -17,7 +17,7 @@ eclipseclean:
 
 bin: src
 	mkdir -p bin
-	javac -sourcepath src $(SRCFILES) -d bin
+	javac -classpath dep/orange-extensions.jar -sourcepath src $(SRCFILES) -d bin
 
 doc: src
 	mkdir -p doc
