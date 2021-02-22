@@ -1,17 +1,19 @@
 SRCFILES := $(shell find src -name \*.java)
 PACKAGES := $(shell find src -name \*.java | sed -E s/^src\\/\|\\/[^\\/]+$$//g | sort | uniq | tr / .)
 
-all: clean bin doc hexcellent.jar
+all: clean bin doc hexcellent.jar Hexcellent.app
 
-eclipseall: eclipseclean hexcellent.jar
+eclipseall: eclipseclean hexcellent.jar Hexcellent.app
 
 clean:
 	rm -rf bin
 	rm -rf doc
 	rm -rf *.jar
+	rm -rf *.app
 
 eclipseclean:
 	rm -rf *.jar
+	rm -rf *.app
 
 bin: src
 	mkdir -p bin
@@ -29,6 +31,15 @@ hexcellent.jar: bin
 		-C bin com/kreative/hexcellent/editor  \
 		-C bin com/kreative/hexcellent/main
 	chmod +x hexcellent.jar
+
+Hexcellent.app: dep hexcellent.jar
+	mkdir -p Hexcellent.app/Contents/MacOS
+	mkdir -p Hexcellent.app/Contents/Resources/Java
+	cp -f dep/PkgInfo Hexcellent.app/Contents
+	cp -f dep/Info.plist Hexcellent.app/Contents
+	cp -f dep/universalJavaApplicationStub Hexcellent.app/Contents/MacOS/Hexcellent
+	cp -f dep/Hexcellent.icns Hexcellent.app/Contents/Resources
+	cp -f hexcellent.jar Hexcellent.app/Contents/Resources/Java
 
 install: hexcellent.jar
 	sudo mkdir -p /usr/local/lib/

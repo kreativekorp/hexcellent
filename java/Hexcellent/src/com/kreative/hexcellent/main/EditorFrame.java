@@ -23,15 +23,7 @@ import com.kreative.hexcellent.editor.JHexEditorSuite;
 
 public class EditorFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	
 	private static final int VM_THRESHOLD = (16 << 20);
-	private static final boolean IS_MAC_OS;
-	static {
-		boolean isMacOS;
-		try { isMacOS = System.getProperty("os.name").toUpperCase().contains("MAC OS"); }
-		catch (Exception e) { isMacOS = false; }
-		IS_MAC_OS = isMacOS;
-	}
 	
 	private final CompositeByteBuffer buffer;
 	private final ByteBufferDocument document;
@@ -150,7 +142,7 @@ public class EditorFrame extends JFrame {
 	
 	private void updateWindow() {
 		String title = (file == null) ? "Untitled" : file.getName();
-		if (IS_MAC_OS) {
+		if (SwingUtils.IS_MAC_OS) {
 			getRootPane().putClientProperty("Window.documentFile", file);
 			getRootPane().putClientProperty("Window.documentModified", changed);
 			setTitle(title);
