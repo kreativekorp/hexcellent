@@ -17,11 +17,11 @@ eclipseclean:
 
 bin: src
 	mkdir -p bin
-	javac -classpath dep/orange-extensions.jar -sourcepath src $(SRCFILES) -d bin
+	javac -classpath dep/ual.jar -sourcepath src $(SRCFILES) -d bin
 
 doc: src
 	mkdir -p doc
-	javadoc -classpath dep/orange-extensions.jar -sourcepath src $(PACKAGES) -d doc
+	javadoc -classpath dep/ual.jar -sourcepath src $(PACKAGES) -d doc
 
 hexcellent.jar: bin
 	export COPYFILE_DISABLE=true
@@ -39,6 +39,7 @@ Hexcellent.app: dep hexcellent.jar
 	cp -f dep/Info.plist Hexcellent.app/Contents
 	cp -f dep/universalJavaApplicationStub Hexcellent.app/Contents/MacOS/Hexcellent
 	cp -f dep/Hexcellent.icns Hexcellent.app/Contents/Resources
+	cp -f dep/*.jar Hexcellent.app/Contents/Resources/Java
 	cp -f hexcellent.jar Hexcellent.app/Contents/Resources/Java
 
 install: hexcellent.jar
