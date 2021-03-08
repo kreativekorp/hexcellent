@@ -539,8 +539,11 @@ public class JHexEditor extends JComponent implements Scrollable {
 		boolean odd = false;
 		int ry = i.top;
 		int ty = i.top + ca;
+		int miny = vr.y - ch;
+		int maxy = vr.y + vr.height;
 		while (offset < length) {
-			if (vr.intersects(0, ry, fw, ch)) {
+			if (ry < 0 || ry >= maxy) break;
+			if (ry >= miny) {
 				// Background
 				if (odd) {
 					// Address Area
