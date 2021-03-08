@@ -48,6 +48,8 @@ public class JHexEditor extends JComponent implements Scrollable {
 	private boolean extendBorders = false;
 	private boolean decimalAddresses = false;
 	private String charset = "ISO-8859-1";
+	private final boolean[] charsetPrintable = new boolean[256];
+	private final String[] charsetStrings = new String[256];
 	private boolean textActive = false;
 	private boolean readOnly = false;
 	private boolean overtype = false;
@@ -72,6 +74,7 @@ public class JHexEditor extends JComponent implements Scrollable {
 		this.document = document;
 		this.document.addByteBufferListener(bufferListener);
 		this.document.addSelectionListener(selectionListener);
+		this.makeCharset();
 		this.setFont(defaultFont);
 		this.setFocusable(true);
 		this.setRequestFocusEnabled(true);
@@ -133,6 +136,7 @@ public class JHexEditor extends JComponent implements Scrollable {
 	
 	public void setCharset(String charset) {
 		this.charset = charset;
+		this.makeCharset();
 		for (JHexEditorListener l : listeners) l.editorStatusChanged(this);
 		repaint();
 	}
@@ -574,20 +578,12 @@ public class JHexEditor extends JComponent implements Scrollable {
 				int hx = i.left + cw * 10;
 				int dx = i.left + cw * (bpr * 3 + 11);
 				while (idx < bpr && off < length) {
-					// Hex
 					boolean sel = (off >= ss && off < se);
+					int b = data[idx] & 0xFF;
 					g.setColor(hexTextColor(sel, odd));
-					g.drawString(HEX[data[idx] & 0xFF], hx, ty);
-					// Text
-					String dataString = dataString(data, idx, 1);
-					if (dataString.contains("\uFFFD")) {
-						g.setColor(textTextColor(sel, odd, false));
-						g.drawString(".", dx, ty);
-					} else {
-						char[] chars = dataString.toCharArray();
-						g.setColor(textTextColor(sel, odd, !shiftControl(chars)));
-						g.drawChars(chars, 0, chars.length, dx, ty);
-					}
+					g.drawString(HEX[b], hx, ty);
+					g.setColor(textTextColor(sel, odd, charsetPrintable[b]));
+					g.drawString(charsetStrings[b], dx, ty);
 					idx++;
 					off++;
 					hx += cw * 3;
@@ -699,9 +695,22 @@ public class JHexEditor extends JComponent implements Scrollable {
 		return h + ":";
 	}
 	
-	private String dataString(byte[] data, int offset, int length) {
-		try { return new String(data, offset, length, charset); }
-		catch (Exception e) { return "\uFFFD"; }
+	private void makeCharset() {
+		byte[] tmp = new byte[1];
+		for (int i = 0; i < 256; i++) {
+			tmp[0] = (byte)i;
+			String dataString;
+			try { dataString = new String(tmp, charset); }
+			catch (Exception e) { dataString = "\uFFFD"; }
+			if (dataString.contains("\uFFFD")) {
+				charsetPrintable[i] = false;
+				charsetStrings[i] = ".";
+			} else {
+				char[] chars = dataString.toCharArray();
+				charsetPrintable[i] = !shiftControl(chars);
+				charsetStrings[i] = new String(chars);
+			}
+		}
 	}
 	
 	private boolean shiftControl(char[] chars) {
