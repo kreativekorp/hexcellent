@@ -1,9 +1,13 @@
 package com.kreative.hexcellent.main;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import com.kreative.hexcellent.buffer.ByteBuffer;
 import com.kreative.hexcellent.buffer.ByteBufferDocument;
 import com.kreative.hexcellent.buffer.ByteBufferSelectionModel;
@@ -19,12 +23,20 @@ public class OptionsMenu extends JMenu {
 	private final PowerKeysMenuItem powerKeys;
 	private final LittleEndianMenuItem littleEndian;
 	
-	public OptionsMenu(final JHexEditor editor) {
+	public OptionsMenu(final EditorFrame f, final JHexEditor editor) {
 		super("Options");
+		add(new FontMenuItem(f, editor));
+		add(new CharsetMenuItem(f, editor));
+		add(new ColorsMenuItem(f, editor));
+		addSeparator();
 		add(decimalAddresses = new DecimalAddressesMenuItem(editor));
 		add(overtypeMode = new OvertypeModeMenuItem(editor));
 		add(powerKeys = new PowerKeysMenuItem(editor));
 		add(littleEndian = new LittleEndianMenuItem(editor));
+		addSeparator();
+		add(new RevertToDefaultMenuItem(f));
+		add(new SetAsDefaultMenuItem(f));
+		
 		editor.addHexEditorListener(new JHexEditorListener() {
 			@Override
 			public void editorStatusChanged(JHexEditor editor) {
@@ -40,6 +52,51 @@ public class OptionsMenu extends JMenu {
 			@Override public void documentChanged(JHexEditor editor, ByteBufferDocument document) {}
 			@Override public void colorsChanged(JHexEditor editor, JHexEditorColors colors) {}
 		});
+	}
+	
+	private static class FontMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public FontMenuItem(final EditorFrame f, final JHexEditor editor) {
+			super("Font...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, SwingUtils.SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Font font = new FontDialog(f, editor.getFont()).showDialog();
+					if (font != null) {
+						editor.setFont(font);
+						f.pack();
+					}
+				}
+			});
+		}
+	}
+	
+	private static class CharsetMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public CharsetMenuItem(final EditorFrame f, final JHexEditor editor) {
+			super("Encoding...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, SwingUtils.SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String cs = new CharsetDialog(f, editor.getCharset()).showDialog();
+					if (cs != null) editor.setCharset(cs);
+				}
+			});
+		}
+	}
+	
+	private static class ColorsMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public ColorsMenuItem(final EditorFrame f, final JHexEditor editor) {
+			super("Color Scheme...");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, SwingUtils.SHORTCUT_KEY));
+			addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JHexEditorColors c = new ColorSchemeDialog(f, editor.getColors()).showDialog();
+					if (c != null) editor.setColors(c);
+				}
+			});
+		}
 	}
 	
 	private static class DecimalAddressesMenuItem extends JCheckBoxMenuItem {
@@ -93,6 +150,32 @@ public class OptionsMenu extends JMenu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					editor.setLittleEndian(isSelected());
+				}
+			});
+		}
+	}
+	
+	private static class RevertToDefaultMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public RevertToDefaultMenuItem(final EditorFrame f) {
+			super("Revert To Default");
+			addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Main.revertOptions(f);
+				}
+			});
+		}
+	}
+	
+	private static class SetAsDefaultMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public SetAsDefaultMenuItem(final EditorFrame f) {
+			super("Set As Default");
+			addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Main.saveOptions(f);
 				}
 			});
 		}

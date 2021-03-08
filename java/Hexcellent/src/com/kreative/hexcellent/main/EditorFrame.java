@@ -108,6 +108,14 @@ public class EditorFrame extends JFrame {
 		in.close();
 	}
 	
+	public JHexEditor getEditor() {
+		return editor;
+	}
+	
+	public JHexEditorSuite getEditorSuite() {
+		return suite;
+	}
+	
 	public boolean save() {
 		if (file == null) {
 			return saveAs();

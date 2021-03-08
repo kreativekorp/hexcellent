@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 public class Main {
+	private static final Options options = new Options();
+	
 	public static void main(String[] args) {
 		try { System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Hexcellent"); } catch (Exception e) {}
 		try { System.setProperty("apple.laf.useScreenMenuBar", "true"); } catch (Exception e) {}
@@ -32,6 +34,9 @@ public class Main {
 			aacn.set(tk, "Hexcellent");
 		} catch (Exception e) {}
 		
+		try { options.read(); }
+		catch (Exception e) {}
+		
 		if (args.length == 0) {
 			newEditor();
 		} else {
@@ -48,6 +53,7 @@ public class Main {
 	
 	public static EditorFrame newEditor() {
 		EditorFrame f = new EditorFrame();
+		options.push(f);
 		f.setVisible(true);
 		return f;
 	}
@@ -67,6 +73,7 @@ public class Main {
 			return openEditor();
 		} else try {
 			EditorFrame f = new EditorFrame(file);
+			options.push(f);
 			f.setVisible(true);
 			return f;
 		} catch (IOException e) {
@@ -76,5 +83,15 @@ public class Main {
 			);
 			return null;
 		}
+	}
+	
+	public static void revertOptions(EditorFrame f) {
+		options.push(f);
+	}
+	
+	public static void saveOptions(EditorFrame f) {
+		options.pull(f);
+		try { options.write(); }
+		catch (Exception e) {}
 	}
 }
