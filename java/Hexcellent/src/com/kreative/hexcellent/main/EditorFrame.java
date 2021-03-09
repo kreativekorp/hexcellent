@@ -8,6 +8,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import com.kreative.hexcellent.buffer.ArrayByteBuffer;
@@ -15,6 +20,7 @@ import com.kreative.hexcellent.buffer.ByteBuffer;
 import com.kreative.hexcellent.buffer.ByteBufferDocument;
 import com.kreative.hexcellent.buffer.ByteBufferSelectionModel;
 import com.kreative.hexcellent.buffer.CompositeByteBuffer;
+import com.kreative.hexcellent.buffer.MMapByteBuffer;
 import com.kreative.hexcellent.buffer.RafByteBuffer;
 import com.kreative.hexcellent.editor.JHexEditor;
 import com.kreative.hexcellent.editor.JHexEditorColors;
@@ -77,7 +83,29 @@ public class EditorFrame extends JFrame {
 		addWindowListener(windowListener);
 	}
 	
-	private static ByteBuffer readFromFile(File f) throws IOException {
+	private static List<ByteBuffer> readFromFile(File f) throws IOException {
+		// Try mapping the entire file into memory.
+		try {
+			List<ByteBuffer> buffers = new ArrayList<ByteBuffer>();
+			@SuppressWarnings("resource")
+			RandomAccessFile raf = new RandomAccessFile(f, "r");
+			FileChannel fc = raf.getChannel();
+			long offset = 0;
+			long length = raf.length();
+			while (length >= VM_THRESHOLD) {
+				buffers.add(new MMapByteBuffer(fc, offset, VM_THRESHOLD));
+				offset += VM_THRESHOLD;
+				length -= VM_THRESHOLD;
+			}
+			if (length > 0) {
+				buffers.add(new MMapByteBuffer(fc, offset, length));
+			}
+			System.out.println("Mapped file into memory.");
+			return buffers;
+		} catch (Throwable t) {
+			System.gc();
+		}
+		// Fall back on array or random access.
 		if (f.length() < VM_THRESHOLD) {
 			FileInputStream in = new FileInputStream(f);
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -85,9 +113,11 @@ public class EditorFrame extends JFrame {
 			while ((read = in.read(buf)) >= 0) out.write(buf, 0, read);
 			in.close();
 			out.close();
-			return new ArrayByteBuffer(out.toByteArray());
+			System.out.println("Loaded file into array.");
+			return Arrays.asList(new ArrayByteBuffer(out.toByteArray()));
 		} else {
-			return new RafByteBuffer(f);
+			System.out.println("Opened file for random access.");
+			return Arrays.asList(new RafByteBuffer(f));
 		}
 	}
 	
@@ -123,9 +153,9 @@ public class EditorFrame extends JFrame {
 			File tmp = File.createTempFile("Hexcellent", ".bin");
 			writeToFile(buffer, tmp);
 			copyFile(tmp, file);
-			ByteBuffer bb = readFromFile(file);
+			List<ByteBuffer> bb = readFromFile(file);
 			buffer.getBackingBufferList().clear();
-			buffer.getBackingBufferList().add(bb);
+			buffer.getBackingBufferList().addAll(bb);
 			changed = false;
 			updateWindow();
 			return true;
