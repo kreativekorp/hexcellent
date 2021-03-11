@@ -838,6 +838,7 @@ public class JHexEditor extends JComponent implements Scrollable {
 			}
 			switch (e.getKeyCode()) {
 				case KeyEvent.VK_ENTER:
+				case KeyEvent.VK_ESCAPE:
 					setTextActive(!textActive);
 					e.consume();
 					return;
@@ -859,6 +860,25 @@ public class JHexEditor extends JComponent implements Scrollable {
 					return;
 				case KeyEvent.VK_DOWN:
 					arrowKey(+getRowWidth(), e.isShiftDown());
+					e.consume();
+					return;
+				case KeyEvent.VK_PAGE_UP:
+					arrowKey(-getPageSize(), e.isShiftDown());
+					e.consume();
+					return;
+				case KeyEvent.VK_PAGE_DOWN:
+					arrowKey(+getPageSize(), e.isShiftDown());
+					e.consume();
+					return;
+				case KeyEvent.VK_HOME:
+					if (e.isShiftDown()) document.setSelectionEnd(0);
+					else document.setSelectionRange(0, 0);
+					e.consume();
+					return;
+				case KeyEvent.VK_END:
+					long el = document.length();
+					if (e.isShiftDown()) document.setSelectionEnd(el);
+					else document.setSelectionRange(el, el);
 					e.consume();
 					return;
 				case KeyEvent.VK_COPY:
@@ -1017,6 +1037,20 @@ public class JHexEditor extends JComponent implements Scrollable {
 		if (bpr < 1) return 0;
 		if (bpr > 4) bpr = 4 * (bpr / 4);
 		return bpr;
+	}
+	
+	private int getPageSize() {
+		Insets i = getInsets();
+		int w = getWidth() - i.left - i.right;
+		FontMetrics fm = getFontMetrics(getFont());
+		int ch = fm.getHeight() + 2;
+		int cw = fm.stringWidth("0123456789ABCDEF") / 16;
+		int bpr = (w - 11 * cw) / (4 * cw);
+		if (bpr < 1) return 0;
+		if (bpr > 4) bpr = 4 * (bpr / 4);
+		int rows = getVisibleRect().height / ch;
+		if (rows < 1) rows = 1;
+		return bpr * rows;
 	}
 	
 	private static final String[] HEX = {
