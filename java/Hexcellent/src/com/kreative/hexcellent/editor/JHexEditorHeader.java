@@ -41,7 +41,7 @@ public class JHexEditorHeader extends JComponent {
 		FontMetrics fm = getFontMetrics(parent.getFont());
 		int ch = fm.getHeight() + 2;
 		int cw = fm.stringWidth("0123456789ABCDEF") / 16;
-		int minimumWidth = cw * 28 + i.left + i.right; // TODO adjust
+		int minimumWidth = cw * 23 + i.left + i.right;
 		int minimumHeight = ch + 5 + i.top + i.bottom;
 		return new Dimension(minimumWidth, minimumHeight);
 	}
@@ -53,7 +53,7 @@ public class JHexEditorHeader extends JComponent {
 		FontMetrics fm = getFontMetrics(parent.getFont());
 		int ch = fm.getHeight() + 2;
 		int cw = fm.stringWidth("0123456789ABCDEF") / 16;
-		int preferredWidth = cw * 76 + i.left + i.right; // TODO adjust
+		int preferredWidth = cw * 47 + i.left + i.right;
 		int preferredHeight = ch + 5 + i.top + i.bottom;
 		return new Dimension(preferredWidth, preferredHeight);
 	}
@@ -92,7 +92,7 @@ public class JHexEditorHeader extends JComponent {
 		long sl = parent.getSelectionLength();
 		long length = parent.length();
 		int ty = i.top + ((h - 1) - ch) / 2 + ca;
-		int tx = i.left + 3;
+		int tx = i.left + cw / 2;
 		g.setColor(colors.headerText);
 		
 		g.drawString("Sel:", tx, ty);

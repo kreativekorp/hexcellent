@@ -399,8 +399,21 @@ public class JHexEditor extends JComponent implements Scrollable {
 	
 	// SIZING AND SCROLLING
 	
+	private int minimumBytesPerRow = 4;
+	private int minimumRowCount = 1;
+	private int preferredBytesPerRow = 16;
+	private int preferredRowCount = 16;
 	private Dimension minimumSize = null;
 	private Dimension preferredSize = null;
+	
+	public int getMinimumBytesPerRow() { return this.minimumBytesPerRow; }
+	public void setMinimumBytesPerRow(int bpr) { this.minimumBytesPerRow = bpr; }
+	public int getMinimumRowCount() { return this.minimumRowCount; }
+	public void setMinimumRowCount(int rows) { this.minimumRowCount = rows; }
+	public int getPreferredBytesPerRow() { return this.preferredBytesPerRow; }
+	public void setPreferredBytesPerRow(int bpr) { this.preferredBytesPerRow = bpr; }
+	public int getPreferredRowCount() { return this.preferredRowCount; }
+	public void setPreferredRowCount(int rows) { this.preferredRowCount = rows; }
 	
 	@Override
 	public void setMinimumSize(Dimension minimumSize) {
@@ -419,8 +432,8 @@ public class JHexEditor extends JComponent implements Scrollable {
 		FontMetrics fm = getFontMetrics(getFont());
 		int ch = fm.getHeight() + 2;
 		int cw = fm.stringWidth("0123456789ABCDEF") / 16;
-		int minimumWidth = cw * 28 + i.left + i.right;
-		int minimumHeight = ch + i.top + i.bottom;
+		int minimumWidth = cw * (minimumBytesPerRow * 4 + 12) + i.left + i.right;
+		int minimumHeight = ch * minimumRowCount + i.top + i.bottom;
 		return new Dimension(minimumWidth, minimumHeight);
 	}
 	
@@ -431,7 +444,7 @@ public class JHexEditor extends JComponent implements Scrollable {
 		FontMetrics fm = getFontMetrics(getFont());
 		int ch = fm.getHeight() + 2;
 		int cw = fm.stringWidth("0123456789ABCDEF") / 16;
-		int minimumHeight = ch + i.top + i.bottom;
+		int minimumHeight = ch * minimumRowCount + i.top + i.bottom;
 		int preferredWidth, bpr;
 		
 		Container parent = getParent();
@@ -444,8 +457,8 @@ public class JHexEditor extends JComponent implements Scrollable {
 			if (bpr < 1) bpr = 1;
 			if (bpr > 4) bpr = 4 * (bpr / 4);
 		} else {
-			preferredWidth = cw * 76 + i.left + i.right;
-			bpr = 16;
+			preferredWidth = cw * (preferredBytesPerRow * 4 + 12) + i.left + i.right;
+			bpr = preferredBytesPerRow;
 		}
 		
 		long length = document.length();
@@ -461,8 +474,8 @@ public class JHexEditor extends JComponent implements Scrollable {
 		FontMetrics fm = getFontMetrics(getFont());
 		int ch = fm.getHeight() + 2;
 		int cw = fm.stringWidth("0123456789ABCDEF") / 16;
-		int preferredWidth = cw * 76 + i.left + i.right;
-		int preferredHeight = ch * 16 + i.top + i.bottom;
+		int preferredWidth = cw * (preferredBytesPerRow * 4 + 12) + i.left + i.right;
+		int preferredHeight = ch * preferredRowCount + i.top + i.bottom;
 		return new Dimension(preferredWidth, preferredHeight);
 	}
 	

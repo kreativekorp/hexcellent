@@ -1,5 +1,6 @@
 package com.kreative.hexcellent.main;
 
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import com.kreative.hexcellent.buffer.ArrayByteBuffer;
 import com.kreative.hexcellent.buffer.ByteBuffer;
 import com.kreative.hexcellent.buffer.ByteBufferDocument;
@@ -215,6 +217,21 @@ public class EditorFrame extends JFrame {
 	};
 	
 	private final WindowAdapter windowListener = new WindowAdapter() {
+		@Override
+		public void windowOpened(WindowEvent e) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					try { Thread.sleep(100); }
+					catch (InterruptedException e) {}
+					int wd = getWidth() - editor.getWidth();
+					int hd = getHeight() - editor.getHeight();
+					Dimension emin = editor.getMinimumSize();
+					Dimension fmin = new Dimension(emin.width + wd, emin.height + hd);
+					setMinimumSize(fmin);
+				}
+			});
+		}
 		@Override
 		public void windowClosing(WindowEvent e) {
 			if (!changed || (file == null && buffer.isEmpty())) {
