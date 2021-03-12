@@ -9,6 +9,8 @@ import java.awt.datatransfer.Transferable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ByteBufferDocument {
 	private final ByteBuffer buffer;
@@ -27,6 +29,10 @@ public class ByteBufferDocument {
 	public boolean get(long offset, byte[] dst, int dstOffset, int length) { return buffer.get(offset, dst, dstOffset, length); }
 	public ByteBuffer slice(long offset, long length) { return buffer.slice(offset, length); }
 	public boolean write(OutputStream out, long offset, long length) throws IOException { return buffer.write(out, offset, length); }
+	public long indexOf(byte[] pattern) { return buffer.indexOf(pattern); }
+	public long indexOf(byte[] pattern, long index) { return buffer.indexOf(pattern, index); }
+	public long lastIndexOf(byte[] pattern) { return buffer.lastIndexOf(pattern); }
+	public long lastIndexOf(byte[] pattern, long index) { return buffer.lastIndexOf(pattern, index); }
 	public void addByteBufferListener(ByteBufferListener l) { buffer.addByteBufferListener(l); }
 	public void removeByteBufferListener(ByteBufferListener l) { buffer.removeByteBufferListener(l); }
 	
@@ -167,6 +173,62 @@ public class ByteBufferDocument {
 		if (!tx.transform(data, 0, (int)length)) return false;
 		ByteBufferAction a = new ReplaceSelectionAction(tx.getName(), data, true);
 		a.redo();
+		history.add(a);
+		return true;
+	}
+	
+	private class ReplaceAllAction extends ByteBufferAction {
+		private final long selectionStart;
+		private final long selectionEnd;
+		private final byte[] pattern;
+		private final byte[] replacement;
+		private final List<Long> offsets;
+		public ReplaceAllAction(byte[] pattern, byte[] replacement) {
+			super("Replace All");
+			this.selectionStart = selection.getSelectionStart();
+			this.selectionEnd = selection.getSelectionEnd();
+			this.pattern = pattern;
+			this.replacement = replacement;
+			this.offsets = new ArrayList<Long>();
+		}
+		@Override
+		public void redo() {
+			long ss = selectionStart;
+			long se = selectionEnd;
+			if (offsets.isEmpty()) {
+				long o = buffer.indexOf(pattern);
+				while (o >= 0) {
+					if (!buffer.remove(o, pattern.length)) break;
+					if (!buffer.insert(o, replacement, 0, replacement.length)) break;
+					offsets.add(o);
+					ss = se = o + replacement.length;
+					o = buffer.indexOf(pattern, ss);
+				}
+			} else {
+				for (long o : offsets) {
+					if (!buffer.remove(o, pattern.length)) break;
+					if (!buffer.insert(o, replacement, 0, replacement.length)) break;
+					ss = se = o + replacement.length;
+				}
+			}
+			selection.setSelectionRange(ss, se);
+		}
+		@Override
+		public void undo() {
+			for (int i = offsets.size() - 1; i >= 0; i--) {
+				long o = offsets.get(i);
+				buffer.remove(o, replacement.length);
+				buffer.insert(o, pattern, 0, pattern.length);
+			}
+			selection.setSelectionRange(selectionStart, selectionEnd);
+		}
+	}
+	
+	public boolean replaceAll(byte[] pattern, byte[] replacement) {
+		if (pattern.length == 0) return false;
+		ReplaceAllAction a = new ReplaceAllAction(pattern, replacement);
+		a.redo();
+		if (a.offsets.isEmpty()) return false;
 		history.add(a);
 		return true;
 	}

@@ -212,6 +212,10 @@ public class JHexEditor extends JComponent implements Scrollable {
 	public boolean get(long offset, byte[] dst, int dstOffset, int length) { return document.get(offset, dst, dstOffset, length); }
 	public ByteBuffer slice(long offset, long length) { return document.slice(offset, length); }
 	public boolean write(OutputStream out, long offset, long length) throws IOException { return document.write(out, offset, length); }
+	public long indexOf(byte[] pattern) { return document.indexOf(pattern); }
+	public long indexOf(byte[] pattern, long index) { return document.indexOf(pattern, index); }
+	public long lastIndexOf(byte[] pattern) { return document.lastIndexOf(pattern); }
+	public long lastIndexOf(byte[] pattern, long index) { return document.lastIndexOf(pattern, index); }
 	
 	public ByteBufferSelectionModel getSelectionModel() { return document.getSelectionModel(); }
 	public long getSelectionStart() { return document.getSelectionStart(); }
@@ -239,6 +243,7 @@ public class JHexEditor extends JComponent implements Scrollable {
 	public boolean deleteSelection(String actionName) { return !readOnly && document.deleteSelection(actionName); }
 	public boolean replaceSelection(String actionName, byte[] data, boolean keepSelected) { return !readOnly && document.replaceSelection(actionName, data, keepSelected); }
 	public boolean transformSelection(ByteTransform tx) { return !readOnly && document.transformSelection(tx); }
+	public boolean replaceAll(byte[] pattern, byte[] replacement) { return !readOnly && document.replaceAll(pattern, replacement); }
 	
 	// EDIT COMMANDS
 	
