@@ -53,7 +53,8 @@ public class Main {
 	
 	public static EditorFrame newEditor() {
 		EditorFrame f = new EditorFrame();
-		options.push(f);
+		options.push(f.getEditorSuite());
+		f.pack();
 		f.setVisible(true);
 		return f;
 	}
@@ -73,7 +74,8 @@ public class Main {
 			return openEditor();
 		} else try {
 			EditorFrame f = new EditorFrame(file);
-			options.push(f);
+			options.push(f.getEditorSuite());
+			f.pack();
 			f.setVisible(true);
 			return f;
 		} catch (IOException e) {
@@ -86,11 +88,12 @@ public class Main {
 	}
 	
 	public static void revertOptions(EditorFrame f) {
-		options.push(f);
+		options.push(f.getEditorSuite());
+		f.pack();
 	}
 	
 	public static void saveOptions(EditorFrame f) {
-		options.pull(f);
+		options.pull(f.getEditorSuite());
 		try { options.write(); }
 		catch (Exception e) {}
 	}

@@ -75,7 +75,7 @@ public class OptionsMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
 		public CharsetMenuItem(final EditorFrame f, final JHexEditor editor) {
 			super("Encoding...");
-			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, SwingUtils.SHORTCUT_KEY));
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, SwingUtils.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String cs = new CharsetDialog(f, editor.getCharset()).showDialog();
@@ -89,7 +89,7 @@ public class OptionsMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
 		public ColorsMenuItem(final EditorFrame f, final JHexEditor editor) {
 			super("Color Scheme...");
-			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, SwingUtils.SHORTCUT_KEY));
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, SwingUtils.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
 			addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JHexEditorColors c = new ColorSchemeDialog(f, editor.getColors()).showDialog();

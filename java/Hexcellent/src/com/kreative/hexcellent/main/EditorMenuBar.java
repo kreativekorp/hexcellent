@@ -9,6 +9,7 @@ public class EditorMenuBar extends JMenuBar {
 	public EditorMenuBar(EditorFrame f, JHexEditor editor) {
 		add(new FileMenu(f));
 		add(new EditMenu(editor));
+		add(new SearchMenu(f, editor));
 		add(new OptionsMenu(f, editor));
 	}
 }

@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 import com.kreative.hexcellent.editor.JHexEditor;
 import com.kreative.hexcellent.editor.JHexEditorColors;
+import com.kreative.hexcellent.editor.JHexEditorSuite;
 
 public class Options {
 	private Font font = new Font("Monospaced", Font.PLAIN, 12);
@@ -19,8 +20,8 @@ public class Options {
 	private boolean enableTransformKeys = true;
 	private boolean littleEndian = false;
 	
-	public void push(EditorFrame f) {
-		JHexEditor editor = f.getEditor();
+	public void push(JHexEditorSuite suite) {
+		JHexEditor editor = suite.getEditor();
 		editor.setFont(font);
 		editor.setColors(colors);
 		editor.setCharset(charset);
@@ -28,11 +29,10 @@ public class Options {
 		editor.setOvertype(overtype);
 		editor.setEnableTransformKeys(enableTransformKeys);
 		editor.setLittleEndian(littleEndian);
-		f.pack();
 	}
 	
-	public void pull(EditorFrame f) {
-		JHexEditor editor = f.getEditor();
+	public void pull(JHexEditorSuite suite) {
+		JHexEditor editor = suite.getEditor();
 		font = editor.getFont();
 		colors = editor.getColors();
 		charset = editor.getCharset();

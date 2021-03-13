@@ -11,6 +11,8 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -78,6 +80,7 @@ public class JHexEditor extends JComponent implements Scrollable {
 		this.setFont(defaultFont);
 		this.setFocusable(true);
 		this.setRequestFocusEnabled(true);
+		this.addFocusListener(focusListener);
 		this.addMouseListener(mouseListener);
 		this.addMouseMotionListener(mouseListener);
 		this.addKeyListener(keyListener);
@@ -672,38 +675,38 @@ public class JHexEditor extends JComponent implements Scrollable {
 	}
 	
 	private Color hexCursorColor() {
-		if (!textActive) return document.isMidByte() ? colors.activeCursorMidByte : colors.activeCursor;
+		if (isFocusOwner() && !textActive) return document.isMidByte() ? colors.activeCursorMidByte : colors.activeCursor;
 		return document.isMidByte() ? colors.inactiveCursorMidByte : colors.inactiveCursor;
 	}
 	
 	private Color hexHighlightColor(boolean odd) {
-		if (!textActive) return odd ? colors.hexAreaActiveHighlightOdd : colors.hexAreaActiveHighlightEven;
+		if (isFocusOwner() && !textActive) return odd ? colors.hexAreaActiveHighlightOdd : colors.hexAreaActiveHighlightEven;
 		return odd ? colors.hexAreaInactiveHighlightOdd : colors.hexAreaInactiveHighlightEven;
 	}
 	
 	private Color hexTextColor(boolean sel, boolean odd) {
-		if (sel && !textActive) return odd ? colors.hexTextActiveHighlightOdd : colors.hexTextActiveHighlightEven;
+		if (sel && isFocusOwner() && !textActive) return odd ? colors.hexTextActiveHighlightOdd : colors.hexTextActiveHighlightEven;
 		if (sel) return odd ? colors.hexTextInactiveHighlightOdd : colors.hexTextInactiveHighlightEven;
 		return odd ? colors.hexTextOdd : colors.hexTextEven;
 	}
 	
 	private Color textCursorColor() {
-		if (textActive) return document.isMidByte() ? colors.activeCursorMidByte : colors.activeCursor;
+		if (isFocusOwner() && textActive) return document.isMidByte() ? colors.activeCursorMidByte : colors.activeCursor;
 		return document.isMidByte() ? colors.inactiveCursorMidByte : colors.inactiveCursor;
 	}
 	
 	private Color textHighlightColor(boolean odd) {
-		if (textActive) return odd ? colors.textAreaActiveHighlightOdd : colors.textAreaActiveHighlightEven;
+		if (isFocusOwner() && textActive) return odd ? colors.textAreaActiveHighlightOdd : colors.textAreaActiveHighlightEven;
 		return odd ? colors.textAreaInactiveHighlightOdd : colors.textAreaInactiveHighlightEven;
 	}
 	
 	private Color textTextColor(boolean sel, boolean odd, boolean printable) {
 		if (printable) {
-			if (sel && textActive) return odd ? colors.textPrintableActiveHighlightOdd : colors.textPrintableActiveHighlightEven;
+			if (sel && isFocusOwner() && textActive) return odd ? colors.textPrintableActiveHighlightOdd : colors.textPrintableActiveHighlightEven;
 			if (sel) return odd ? colors.textPrintableInactiveHighlightOdd : colors.textPrintableInactiveHighlightEven;
 			return odd ? colors.textPrintableOdd : colors.textPrintableEven;
 		} else {
-			if (sel && textActive) return odd ? colors.textUnprintableActiveHighlightOdd : colors.textUnprintableActiveHighlightEven;
+			if (sel && isFocusOwner() && textActive) return odd ? colors.textUnprintableActiveHighlightOdd : colors.textUnprintableActiveHighlightEven;
 			if (sel) return odd ? colors.textUnprintableInactiveHighlightOdd : colors.textUnprintableInactiveHighlightEven;
 			return odd ? colors.textUnprintableOdd : colors.textUnprintableEven;
 		}
@@ -769,8 +772,19 @@ public class JHexEditor extends JComponent implements Scrollable {
 	private final ByteBufferSelectionListener selectionListener = new ByteBufferSelectionListener() {
 		@Override
 		public void selectionChanged(ByteBufferSelectionModel sm, long start, long end) {
-			scrollRectToVisible(getRectForOffset(document.getSelectionEnd()));
+			if (isShowing()) scrollRectToVisible(getRectForOffset(document.getSelectionEnd()));
 			for (JHexEditorListener l : listeners) l.selectionChanged(sm, start, end);
+			repaint();
+		}
+	};
+	
+	private final FocusListener focusListener = new FocusListener() {
+		@Override
+		public void focusGained(FocusEvent e) {
+			repaint();
+		}
+		@Override
+		public void focusLost(FocusEvent e) {
 			repaint();
 		}
 	};
