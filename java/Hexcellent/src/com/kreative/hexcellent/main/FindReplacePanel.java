@@ -102,6 +102,8 @@ public class FindReplacePanel extends JPanel {
 		o.pull(f.getEditorSuite());
 		o.push(findSuite);
 		o.push(replaceSuite);
+		findSuite.getInspector().setVisible(false);
+		replaceSuite.getInspector().setVisible(false);
 		findEditor.setPreferredRowCount(8);
 		replaceEditor.setPreferredRowCount(8);
 		findEditor.setEnableShortcutKeys(true);

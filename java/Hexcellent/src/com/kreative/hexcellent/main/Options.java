@@ -19,6 +19,7 @@ public class Options {
 	private boolean overtype = false;
 	private boolean enableTransformKeys = true;
 	private boolean littleEndian = false;
+	private boolean showInspector = true;
 	
 	public void push(JHexEditorSuite suite) {
 		JHexEditor editor = suite.getEditor();
@@ -29,6 +30,7 @@ public class Options {
 		editor.setOvertype(overtype);
 		editor.setEnableTransformKeys(enableTransformKeys);
 		editor.setLittleEndian(littleEndian);
+		suite.getInspector().setVisible(showInspector);
 	}
 	
 	public void pull(JHexEditorSuite suite) {
@@ -40,6 +42,7 @@ public class Options {
 		overtype = editor.getOvertype();
 		enableTransformKeys = editor.getEnableTransformKeys();
 		littleEndian = editor.isLittleEndian();
+		showInspector = suite.getInspector().isVisible();
 	}
 	
 	public void read() throws IOException {
@@ -104,6 +107,11 @@ public class Options {
 				catch (NumberFormatException e) { continue; }
 				littleEndian = (i != 0);
 			}
+			if (key.equalsIgnoreCase("ShowInspector")) {
+				int i; try { i = Integer.parseInt(value); }
+				catch (NumberFormatException e) { continue; }
+				showInspector = (i != 0);
+			}
 		}
 	}
 	
@@ -130,6 +138,7 @@ public class Options {
 		out.println("OvertypeMode=" + (overtype ? 1 : 0));
 		out.println("EnableTransformKeys=" + (enableTransformKeys ? 1 : 0));
 		out.println("LittleEndian=" + (littleEndian ? 1 : 0));
+		out.println("ShowInspector=" + (showInspector ? 1 : 0));
 	}
 	
 	private static File getPreferencesFile() {

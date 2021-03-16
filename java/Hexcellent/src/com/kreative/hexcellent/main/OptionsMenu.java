@@ -3,6 +3,8 @@ package com.kreative.hexcellent.main;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -13,6 +15,7 @@ import com.kreative.hexcellent.buffer.ByteBufferDocument;
 import com.kreative.hexcellent.buffer.ByteBufferSelectionModel;
 import com.kreative.hexcellent.editor.JHexEditor;
 import com.kreative.hexcellent.editor.JHexEditorColors;
+import com.kreative.hexcellent.editor.JHexEditorInspector;
 import com.kreative.hexcellent.editor.JHexEditorListener;
 
 public class OptionsMenu extends JMenu {
@@ -33,6 +36,7 @@ public class OptionsMenu extends JMenu {
 		add(overtypeMode = new OvertypeModeMenuItem(editor));
 		add(powerKeys = new PowerKeysMenuItem(editor));
 		add(littleEndian = new LittleEndianMenuItem(editor));
+		add(new ShowInspectorMenuItem(f.getEditorSuite().getInspector()));
 		addSeparator();
 		add(new RevertToDefaultMenuItem(f));
 		add(new SetAsDefaultMenuItem(f));
@@ -103,6 +107,7 @@ public class OptionsMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
 		public DecimalAddressesMenuItem(final JHexEditor editor) {
 			super("Decimal Addresses");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, SwingUtils.SHORTCUT_KEY));
 			setSelected(editor.getDecimalAddresses());
 			addActionListener(new ActionListener() {
 				@Override
@@ -117,6 +122,7 @@ public class OptionsMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
 		public OvertypeModeMenuItem(final JHexEditor editor) {
 			super("Overtype Mode");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, SwingUtils.SHORTCUT_KEY));
 			setSelected(editor.getOvertype());
 			addActionListener(new ActionListener() {
 				@Override
@@ -145,11 +151,37 @@ public class OptionsMenu extends JMenu {
 		private static final long serialVersionUID = 1L;
 		public LittleEndianMenuItem(final JHexEditor editor) {
 			super("Little Endian");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, SwingUtils.SHORTCUT_KEY));
 			setSelected(editor.isLittleEndian());
 			addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					editor.setLittleEndian(isSelected());
+				}
+			});
+		}
+	}
+	
+	private static class ShowInspectorMenuItem extends JCheckBoxMenuItem {
+		private static final long serialVersionUID = 1L;
+		public ShowInspectorMenuItem(final JHexEditorInspector inspector) {
+			super("Show Inspector");
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, SwingUtils.SHORTCUT_KEY | KeyEvent.SHIFT_MASK));
+			setSelected(inspector.isVisible());
+			addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					inspector.setVisible(isSelected());
+				}
+			});
+			inspector.addComponentListener(new ComponentAdapter() {
+				@Override
+				public void componentHidden(ComponentEvent e) {
+					setSelected(inspector.isVisible());
+				}
+				@Override
+				public void componentShown(ComponentEvent e) {
+					setSelected(inspector.isVisible());
 				}
 			});
 		}

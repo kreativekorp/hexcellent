@@ -12,6 +12,7 @@ public class JHexEditorSuite extends JPanel {
 	private final JHexEditor editor;
 	private final JScrollPane scrollPane;
 	private final JHexEditorHeader header;
+	private final JHexEditorInspector inspector;
 	
 	public JHexEditorSuite() {
 		this(new JHexEditor());
@@ -37,10 +38,12 @@ public class JHexEditorSuite extends JPanel {
 			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
 		);
 		this.header = new JHexEditorHeader(editor);
+		this.inspector = new JHexEditorInspector(editor);
 		
 		setLayout(new BorderLayout());
 		add(scrollPane, BorderLayout.CENTER);
 		add(header, BorderLayout.NORTH);
+		add(inspector, BorderLayout.SOUTH);
 	}
 	
 	public JHexEditor getEditor() {
@@ -53,5 +56,9 @@ public class JHexEditorSuite extends JPanel {
 	
 	public JHexEditorHeader getHeader() {
 		return this.header;
+	}
+	
+	public JHexEditorInspector getInspector() {
+		return this.inspector;
 	}
 }
