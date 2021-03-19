@@ -2,13 +2,11 @@ package com.kreative.experimental.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import com.kreative.experimental.KDataInput;
-import com.kreative.experimental.KDataOutput;
+import com.kreative.experimental.KDataInputStream;
+import com.kreative.experimental.KDataOutputStream;
 import com.kreative.hexcellent.buffer.FloatFormat;
 
 public class KDataInputTest {
@@ -84,14 +82,16 @@ public class KDataInputTest {
 			byte[] data = new byte[td.length];
 			for (int i = 0; i < td.length; i++) data[i] = (byte)td[i];
 			ByteArrayInputStream bin = new ByteArrayInputStream(data, 2, td.length - 2);
-			KDataInput kin = new KDataInput(new DataInputStream(bin));
+			KDataInputStream kin = new KDataInputStream(bin);
 			BigInteger v = kin.readUnsignedBEB128();
+			kin.close();
 			boolean pass = v.equals(BigInteger.valueOf(td[0]));
 			System.out.print(pass ? "PASS " : ("FAIL: [ " + v + " != " + td[0] + " ] "));
 			
 			bin = new ByteArrayInputStream(data, 2, td.length - 2);
-			kin = new KDataInput(new DataInputStream(bin));
+			kin = new KDataInputStream(bin);
 			v = kin.readSignedBEB128();
+			kin.close();
 			pass = v.equals(BigInteger.valueOf(td[1]));
 			System.out.print(pass ? "PASS " : ("FAIL: [ " + v + " != " + td[1] + " ] "));
 		}
@@ -101,14 +101,16 @@ public class KDataInputTest {
 			byte[] data = new byte[td.length];
 			for (int i = 0; i < td.length; i++) data[i] = (byte)td[i];
 			ByteArrayInputStream bin = new ByteArrayInputStream(data, 2, td.length - 2);
-			KDataInput kin = new KDataInput(new DataInputStream(bin));
+			KDataInputStream kin = new KDataInputStream(bin);
 			BigInteger v = kin.readUnsignedLEB128();
+			kin.close();
 			boolean pass = v.equals(BigInteger.valueOf(td[0]));
 			System.out.print(pass ? "PASS " : ("FAIL: [ " + v + " != " + td[0] + " ] "));
 			
 			bin = new ByteArrayInputStream(data, 2, td.length - 2);
-			kin = new KDataInput(new DataInputStream(bin));
+			kin = new KDataInputStream(bin);
 			v = kin.readSignedLEB128();
+			kin.close();
 			pass = v.equals(BigInteger.valueOf(td[1]));
 			System.out.print(pass ? "PASS " : ("FAIL: [ " + v + " != " + td[1] + " ] "));
 		}
@@ -116,16 +118,18 @@ public class KDataInputTest {
 		
 		for (Number[] td : FP128_TESTS) {
 			ByteArrayOutputStream bout = new ByteArrayOutputStream();
-			KDataOutput kout = new KDataOutput(new DataOutputStream(bout));
+			KDataOutputStream kout = new KDataOutputStream(bout);
 			kout.writeByte(td[0].byteValue());
 			if (td[1] != null) kout.writeUnsignedBEB128(BigInteger.valueOf(td[1].intValue()));
 			if (td[2] != null) kout.writeUnsignedBEB128(BigInteger.valueOf(td[2].intValue()));
+			kout.close();
 			byte[] data = bout.toByteArray();
 			
 			ByteArrayInputStream bin = new ByteArrayInputStream(data);
-			KDataInput kin = new KDataInput(new DataInputStream(bin));
+			KDataInputStream kin = new KDataInputStream(bin);
 			Number actual = kin.readBEFP128();
 			Number expected = td[3];
+			kin.close();
 			final boolean pass1;
 			if (actual instanceof BigDecimal && expected instanceof BigDecimal) {
 				pass1 = ((BigDecimal)actual).compareTo((BigDecimal)expected) == 0;
@@ -135,16 +139,18 @@ public class KDataInputTest {
 			System.out.print(pass1 ? "PASS " : ("FAIL: [ " + actual + " != " + expected + " ] "));
 			
 			bout = new ByteArrayOutputStream();
-			kout = new KDataOutput(new DataOutputStream(bout));
+			kout = new KDataOutputStream(bout);
 			kout.writeByte(td[0].byteValue());
 			if (td[1] != null) kout.writeUnsignedLEB128(BigInteger.valueOf(td[1].intValue()));
 			if (td[2] != null) kout.writeUnsignedLEB128(BigInteger.valueOf(td[2].intValue()));
+			kout.close();
 			data = bout.toByteArray();
 			
 			bin = new ByteArrayInputStream(data);
-			kin = new KDataInput(new DataInputStream(bin));
+			kin = new KDataInputStream(bin);
 			actual = kin.readLEFP128();
 			expected = td[3];
+			kin.close();
 			final boolean pass2;
 			if (actual instanceof BigDecimal && expected instanceof BigDecimal) {
 				pass2 = ((BigDecimal)actual).compareTo((BigDecimal)expected) == 0;

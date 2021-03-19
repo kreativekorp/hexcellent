@@ -1,12 +1,11 @@
 package com.kreative.experimental.test;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
-import com.kreative.experimental.KDataOutput;
+import com.kreative.experimental.KDataOutputStream;
 import com.kreative.hexcellent.buffer.FloatFormat;
 
 public class KDataOutputTest {
@@ -128,29 +127,33 @@ public class KDataOutputTest {
 	public static void main(String[] args) throws IOException {
 		for (TestCase td : B128_TESTS) {
 			ByteArrayOutputStream bs = new ByteArrayOutputStream();
-			KDataOutput out = new KDataOutput(new DataOutputStream(bs));
+			KDataOutputStream out = new KDataOutputStream(bs);
 			out.writeUnsignedBEB128(td.value);
+			out.close();
 			boolean pass = Arrays.equals(bs.toByteArray(), td.ubeb128);
 			System.out.print(pass ? "PASS " : "FAIL: ");
 			if (!pass) { System.out.println(td.value); printHex(bs.toByteArray()); printHex(td.ubeb128); }
 			
 			bs = new ByteArrayOutputStream();
-			out = new KDataOutput(new DataOutputStream(bs));
+			out = new KDataOutputStream(bs);
 			out.writeSignedBEB128(td.value);
+			out.close();
 			pass = Arrays.equals(bs.toByteArray(), td.sbeb128);
 			System.out.print(pass ? "PASS " : "FAIL: ");
 			if (!pass) { System.out.println(td.value); printHex(bs.toByteArray()); printHex(td.sbeb128); }
 			
 			bs = new ByteArrayOutputStream();
-			out = new KDataOutput(new DataOutputStream(bs));
+			out = new KDataOutputStream(bs);
 			out.writeUnsignedLEB128(td.value);
+			out.close();
 			pass = Arrays.equals(bs.toByteArray(), td.uleb128);
 			System.out.print(pass ? "PASS " : "FAIL: ");
 			if (!pass) { System.out.println(td.value); printHex(bs.toByteArray()); printHex(td.uleb128); }
 			
 			bs = new ByteArrayOutputStream();
-			out = new KDataOutput(new DataOutputStream(bs));
+			out = new KDataOutputStream(bs);
 			out.writeSignedLEB128(td.value);
+			out.close();
 			pass = Arrays.equals(bs.toByteArray(), td.sleb128);
 			System.out.print(pass ? "PASS " : "FAIL: ");
 			if (!pass) { System.out.println(td.value); printHex(bs.toByteArray()); printHex(td.sleb128); }
@@ -159,16 +162,18 @@ public class KDataOutputTest {
 		
 		for (Number[] td : FP128_TESTS) {
 			ByteArrayOutputStream bout = new ByteArrayOutputStream();
-			KDataOutput kout = new KDataOutput(new DataOutputStream(bout));
+			KDataOutputStream kout = new KDataOutputStream(bout);
 			kout.writeByte(td[0].byteValue());
 			if (td[1] != null) kout.writeUnsignedBEB128(BigInteger.valueOf(td[1].intValue()));
 			if (td[2] != null) kout.writeUnsignedBEB128(BigInteger.valueOf(td[2].intValue()));
+			kout.close();
 			byte[] expected = bout.toByteArray();
 			
 			for (int i = 3; i < td.length; i++) {
 				bout = new ByteArrayOutputStream();
-				kout = new KDataOutput(new DataOutputStream(bout));
+				kout = new KDataOutputStream(bout);
 				kout.writeBEFP128(td[i]);
+				kout.close();
 				byte[] actual = bout.toByteArray();
 				boolean pass = Arrays.equals(expected, actual);
 				System.out.print(pass ? "PASS " : "FAIL: ");
@@ -176,16 +181,18 @@ public class KDataOutputTest {
 			}
 			
 			bout = new ByteArrayOutputStream();
-			kout = new KDataOutput(new DataOutputStream(bout));
+			kout = new KDataOutputStream(bout);
 			kout.writeByte(td[0].byteValue());
 			if (td[1] != null) kout.writeUnsignedLEB128(BigInteger.valueOf(td[1].intValue()));
 			if (td[2] != null) kout.writeUnsignedLEB128(BigInteger.valueOf(td[2].intValue()));
+			kout.close();
 			expected = bout.toByteArray();
 			
 			for (int i = 3; i < td.length; i++) {
 				bout = new ByteArrayOutputStream();
-				kout = new KDataOutput(new DataOutputStream(bout));
+				kout = new KDataOutputStream(bout);
 				kout.writeLEFP128(td[i]);
+				kout.close();
 				byte[] actual = bout.toByteArray();
 				boolean pass = Arrays.equals(expected, actual);
 				System.out.print(pass ? "PASS " : "FAIL: ");
