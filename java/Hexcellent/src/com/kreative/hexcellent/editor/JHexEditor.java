@@ -1030,11 +1030,11 @@ public class JHexEditor extends JComponent implements Scrollable {
 							e.consume();
 							return;
 						case '.': case '>':
-							document.transformSelection(littleEndian ? RotateTransform.LSR_LE : RotateTransform.LSR_BE);
+							document.transformSelection(littleEndian ? RotateTransform.ASR_LE : RotateTransform.ASR_BE);
 							e.consume();
 							return;
 						case '/': case '?':
-							document.transformSelection(littleEndian ? RotateTransform.ASR_LE : RotateTransform.ASR_BE);
+							document.transformSelection(littleEndian ? RotateTransform.LSR_LE : RotateTransform.LSR_BE);
 							e.consume();
 							return;
 						case '=': case '+':
