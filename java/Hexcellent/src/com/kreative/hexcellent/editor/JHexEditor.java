@@ -334,7 +334,7 @@ public class JHexEditor extends JComponent implements Scrollable {
 		int tax = i.left + cw * (bpr * 3 + 10);
 		
 		long length = document.length();
-		long offset = (((y - i.top) / ch) * bpr);
+		long offset = ((long)((y - i.top) / ch) * (long)bpr);
 		if (offset < 0) offset = 0;
 		if (offset > length) offset = length;
 		if (x < hax) return new PointInfo(true, false, false, offset, length, bpr);
@@ -556,63 +556,62 @@ public class JHexEditor extends JComponent implements Scrollable {
 		long ss = document.getSelectionMin();
 		long se = document.getSelectionMax();
 		long length = document.length();
-		long offset = 0;
-		boolean odd = false;
-		int ry = i.top;
-		int ty = i.top + ca;
 		int miny = vr.y - ch;
 		int maxy = vr.y + vr.height;
-		while (offset < length) {
-			if (ry < 0 || ry >= maxy) break;
-			if (ry >= miny) {
-				// Background
-				if (odd) {
-					// Address Area
-					g.setColor(colors.addressAreaOdd);
-					g.fillRect(aax, ry, aaw, ch);
-					// Hex Area
-					g.setColor(colors.hexAreaOdd);
-					g.fillRect(hax, ry, haw, ch);
-					// Text Area
-					g.setColor(colors.textAreaOdd);
-					g.fillRect(tax, ry, taw, ch);
-				}
-				// Highlight
-				if (ss != se && ss < offset + bpr && se > offset) {
-					int s = (int)Math.max(ss - offset, 0);
-					int e = (int)Math.min(se - offset, bpr);
-					int hs = i.left + cw * (s * 3 + 9) + cw / 2;
-					int he = i.left + cw * (e * 3 + 9) + cw / 2;
-					int ds = i.left + cw * (bpr * 3 + 11 + s);
-					int de = i.left + cw * (bpr * 3 + 11 + e);
-					g.setColor(hexHighlightColor(odd));
-					g.fillRect(hs, ry, he - hs, ch);
-					g.setColor(textHighlightColor(odd));
-					g.fillRect(ds, ry, de - ds, ch);
-				}
-				// Address
-				String addressString = addressString(offset);
-				int asx = i.left + cw * 9 - fm.stringWidth(addressString);
-				g.setColor(odd ? colors.addressTextOdd : colors.addressTextEven);
-				g.drawString(addressString, asx, ty);
-				// Data
-				document.get(offset, data, 0, (int)Math.min(bpr, length - offset));
-				int idx = 0;
-				long off = offset;
-				int hx = i.left + cw * 10;
-				int dx = i.left + cw * (bpr * 3 + 11);
-				while (idx < bpr && off < length) {
-					boolean sel = (off >= ss && off < se);
-					int b = data[idx] & 0xFF;
-					g.setColor(hexTextColor(sel, odd));
-					g.drawString(HEX[b], hx, ty);
-					g.setColor(textTextColor(sel, odd, charsetPrintable[b]));
-					g.drawString(charsetStrings[b], dx, ty);
-					idx++;
-					off++;
-					hx += cw * 3;
-					dx += cw;
-				}
+		int startRow = (vr.y - i.top) / ch;
+		if (startRow < 0) startRow = 0;
+		long offset = (long)startRow * (long)bpr;
+		boolean odd = ((startRow & 1) != 0);
+		int ry = i.top + startRow * ch;
+		int ty = ry + ca;
+		while (offset < length && ry >= miny && ry < maxy) {
+			// Background
+			if (odd) {
+				// Address Area
+				g.setColor(colors.addressAreaOdd);
+				g.fillRect(aax, ry, aaw, ch);
+				// Hex Area
+				g.setColor(colors.hexAreaOdd);
+				g.fillRect(hax, ry, haw, ch);
+				// Text Area
+				g.setColor(colors.textAreaOdd);
+				g.fillRect(tax, ry, taw, ch);
+			}
+			// Highlight
+			if (ss != se && ss < offset + bpr && se > offset) {
+				int s = (int)Math.max(ss - offset, 0);
+				int e = (int)Math.min(se - offset, bpr);
+				int hs = i.left + cw * (s * 3 + 9) + cw / 2;
+				int he = i.left + cw * (e * 3 + 9) + cw / 2;
+				int ds = i.left + cw * (bpr * 3 + 11 + s);
+				int de = i.left + cw * (bpr * 3 + 11 + e);
+				g.setColor(hexHighlightColor(odd));
+				g.fillRect(hs, ry, he - hs, ch);
+				g.setColor(textHighlightColor(odd));
+				g.fillRect(ds, ry, de - ds, ch);
+			}
+			// Address
+			String addressString = addressString(offset);
+			int asx = i.left + cw * 9 - fm.stringWidth(addressString);
+			g.setColor(odd ? colors.addressTextOdd : colors.addressTextEven);
+			g.drawString(addressString, asx, ty);
+			// Data
+			document.get(offset, data, 0, (int)Math.min(bpr, length - offset));
+			int idx = 0;
+			long off = offset;
+			int hx = i.left + cw * 10;
+			int dx = i.left + cw * (bpr * 3 + 11);
+			while (idx < bpr && off < length) {
+				boolean sel = (off >= ss && off < se);
+				int b = data[idx] & 0xFF;
+				g.setColor(hexTextColor(sel, odd));
+				g.drawString(HEX[b], hx, ty);
+				g.setColor(textTextColor(sel, odd, charsetPrintable[b]));
+				g.drawString(charsetStrings[b], dx, ty);
+				idx++;
+				off++;
+				hx += cw * 3;
+				dx += cw;
 			}
 			offset += bpr;
 			odd = !odd;
