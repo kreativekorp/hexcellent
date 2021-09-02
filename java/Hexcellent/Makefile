@@ -17,11 +17,11 @@ eclipseclean:
 
 bin: src
 	mkdir -p bin
-	javac -classpath dep/ual.jar -sourcepath src $(SRCFILES) -d bin
+	javac $(JAVACFLAGS) -classpath dep/ual.jar -sourcepath src $(SRCFILES) -d bin
 
 doc: src
 	mkdir -p doc
-	javadoc -classpath dep/ual.jar -sourcepath src $(PACKAGES) -d doc
+	javadoc $(JAVADOCFLAGS) -classpath dep/ual.jar -sourcepath src $(PACKAGES) -d doc
 
 hexcellent.jar: bin
 	export COPYFILE_DISABLE=true
