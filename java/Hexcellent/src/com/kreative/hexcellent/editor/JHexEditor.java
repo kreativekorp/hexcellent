@@ -1000,6 +1000,10 @@ public class JHexEditor extends JComponent implements Scrollable {
 							document.transformSelection(BitTransform.INVERT);
 							e.consume();
 							return;
+						case 'M': case 'm':
+							document.transformSelection(BitTransform.INVERT_MSB);
+							e.consume();
+							return;
 						case 'V': case 'v':
 							document.transformSelection(RandomTransform.RANDOM);
 							e.consume();
