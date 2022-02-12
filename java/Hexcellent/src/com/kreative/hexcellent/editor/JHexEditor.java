@@ -19,6 +19,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
@@ -58,6 +59,7 @@ public class JHexEditor extends JComponent implements Scrollable {
 	private boolean enableShortcutKeys = true;
 	private boolean enableTransformKeys = true;
 	private boolean littleEndian = false;
+	private long mark = 0;
 	private final List<JHexEditorListener> listeners = new ArrayList<JHexEditorListener>();
 	
 	public JHexEditor() {
@@ -196,6 +198,15 @@ public class JHexEditor extends JComponent implements Scrollable {
 	
 	public void setLittleEndian(boolean littleEndian) {
 		this.littleEndian = littleEndian;
+		for (JHexEditorListener l : listeners) l.editorStatusChanged(this);
+	}
+	
+	public long getMark() {
+		return this.mark;
+	}
+	
+	public void setMark(long mark) {
+		this.mark = mark;
 		for (JHexEditorListener l : listeners) l.editorStatusChanged(this);
 	}
 	
@@ -979,6 +990,22 @@ public class JHexEditor extends JComponent implements Scrollable {
 							return;
 						case 'L': case 'l':
 							setLittleEndian(!littleEndian);
+							e.consume();
+							return;
+						case 'K': case 'k':
+							setMark(document.getSelectionMin());
+							e.consume();
+							return;
+						case 'J': case 'j':
+							long jm = mark;
+							byte[] jd = document.getSelection();
+							if (jd != null && jd.length > 0) {
+								if (littleEndian) ReverseTransform.BYTES.transform(jd, 0, jd.length);
+								jm += new BigInteger(jd).longValue();
+							}
+							long jl = document.length();
+							if (jm > jl) jm = jl;
+							document.setSelectionRange(jm, jm);
 							e.consume();
 							return;
 					}
