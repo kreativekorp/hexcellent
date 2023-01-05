@@ -118,10 +118,10 @@ public class EditorFrame extends JFrame {
 			in.close();
 			out.close();
 			System.out.println("Loaded file into array.");
-			return Arrays.asList(new ArrayByteBuffer(out.toByteArray()));
+			return Arrays.<ByteBuffer>asList(new ArrayByteBuffer(out.toByteArray()));
 		} else {
 			System.out.println("Opened file for random access.");
-			return Arrays.asList(new RafByteBuffer(f));
+			return Arrays.<ByteBuffer>asList(new RafByteBuffer(f));
 		}
 	}
 	
