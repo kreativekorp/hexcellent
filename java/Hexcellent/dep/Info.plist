@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Hexcellent</string>
 	<key>CFBundleGetInfoString</key>
-	<string>© 2008-2021 Kreative Software</string>
+	<string>© 2008-2023 Kreative Software</string>
 	<key>CFBundleIconFile</key>
 	<string>Hexcellent.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -21,11 +21,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.0.1</string>
 	<key>CFBundleSignature</key>
 	<string>jHEX</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.0.1</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>JavaX</key>

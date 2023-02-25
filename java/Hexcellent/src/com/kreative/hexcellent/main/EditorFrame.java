@@ -172,13 +172,16 @@ public class EditorFrame extends JFrame {
 		}
 	}
 	
+	private static String lastSaveDirectory = null;
 	public boolean saveAs() {
 		FileDialog fd = new FileDialog(this, "Save", FileDialog.SAVE);
+		if (lastSaveDirectory != null) fd.setDirectory(lastSaveDirectory);
 		fd.setVisible(true);
 		String parent = fd.getDirectory();
 		String name = fd.getFile();
+		fd.dispose();
 		if (parent == null || name == null) return false;
-		file = new File(parent, name);
+		file = new File((lastSaveDirectory = parent), name);
 		return save();
 	}
 	
