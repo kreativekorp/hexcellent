@@ -27,7 +27,7 @@ import com.kreative.hexcellent.buffer.ReverseTransform;
 
 public class JHexEditorInspector extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static final int MAX_LENGTH = (1 << 16);
+	private static final int MAX_LENGTH = 256;
 	
 	private final JHexEditor parent;
 	private final JTextField binField;
