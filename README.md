@@ -20,6 +20,7 @@ When Power Keys are enabled and the focus is on the hex side of the editor, the 
 * `Y` - Replace selection with all ASCII spaces (`20 20`)
 * `X` - Replace selection with all ones (`FF FF`)
 * `I` - Invert selected bits (`00 00` → `FF FF` and vice versa)
+* `M` - Invert most significant bits of selected bytes (`00 FF` → `80 7F` and vice versa)
 * `V` - Replace selection with random data
 * `S` - Swap selected bytes / reverse endianness (`01 02` → `02 01` and vice versa)
 * `N` - Swap selected nybbles (`12 34` → `43 21` and vice versa)
@@ -31,8 +32,14 @@ When Power Keys are enabled and the focus is on the hex side of the editor, the 
 * `?` - Shift selected bits to the right with zero extension (`LSR`)
 * `+` - Increment selected value
 * `-` - Decrement selected value
+* `K` - Set mark at start of selection
+* `J` - Jump to (mark + selected value)
 * `H` - Switch between hex and decimal addresses
 * `L` - Switch between big and little endian
+
+## Find and Replace
+
+Why use regular text fields for find and replace like other hex editors when what you're finding and replacing is binary data, not text? Instead of regular text fields in its Find & Replace dialog, Hexcellent uses... more hex editors!
 
 ![](wiki/findreplace.png)
 
