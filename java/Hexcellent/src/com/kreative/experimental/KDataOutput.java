@@ -40,6 +40,9 @@ public interface KDataOutput extends DataOutput {
 	public void writeSignedLEB128(BigInteger v) throws IOException;
 	public void writeUnsignedLEB128(BigInteger v) throws IOException;
 	
-	public void writeBEFP128(Number value) throws IOException;
-	public void writeLEFP128(Number value) throws IOException;
+	public void writeUnsignedBEB100(BigInteger v) throws IOException;
+	public void writeUnsignedLEB100(BigInteger v) throws IOException;
+	
+	public void writeVLFPBE(Number value) throws IOException;
+	public void writeVLFPLE(Number value) throws IOException;
 }

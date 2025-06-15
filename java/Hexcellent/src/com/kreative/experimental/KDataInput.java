@@ -46,6 +46,9 @@ public interface KDataInput extends DataInput {
 	public BigInteger readSignedLEB128() throws IOException;
 	public BigInteger readUnsignedLEB128() throws IOException;
 	
-	public Number readBEFP128() throws IOException;
-	public Number readLEFP128() throws IOException;
+	public BigInteger readUnsignedBEB100() throws IOException;
+	public BigInteger readUnsignedLEB100() throws IOException;
+	
+	public Number readVLFPBE() throws IOException;
+	public Number readVLFPLE() throws IOException;
 }

@@ -66,6 +66,9 @@ public final class KDataInputStream extends InputStream implements DataInput, KD
 	@Override public final BigInteger readSignedLEB128() throws IOException { return kin.readSignedLEB128(); }
 	@Override public final BigInteger readUnsignedLEB128() throws IOException { return kin.readUnsignedLEB128(); }
 	
-	@Override public final Number readBEFP128() throws IOException { return kin.readBEFP128(); }
-	@Override public final Number readLEFP128() throws IOException { return kin.readLEFP128(); }
+	@Override public final BigInteger readUnsignedBEB100() throws IOException { return kin.readUnsignedBEB100(); }
+	@Override public final BigInteger readUnsignedLEB100() throws IOException { return kin.readUnsignedLEB100(); }
+	
+	@Override public final Number readVLFPBE() throws IOException { return kin.readVLFPBE(); }
+	@Override public final Number readVLFPLE() throws IOException { return kin.readVLFPLE(); }
 }

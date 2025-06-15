@@ -53,6 +53,9 @@ public final class KDataOutputStream extends OutputStream implements DataOutput,
 	@Override public final void writeSignedLEB128(BigInteger v) throws IOException { kout.writeSignedLEB128(v); }
 	@Override public final void writeUnsignedLEB128(BigInteger v) throws IOException { kout.writeUnsignedLEB128(v); }
 	
-	@Override public final void writeBEFP128(Number value) throws IOException { kout.writeBEFP128(value); }
-	@Override public final void writeLEFP128(Number value) throws IOException { kout.writeLEFP128(value); }
+	@Override public final void writeUnsignedBEB100(BigInteger v) throws IOException { kout.writeUnsignedBEB100(v); }
+	@Override public final void writeUnsignedLEB100(BigInteger v) throws IOException { kout.writeUnsignedLEB100(v); }
+	
+	@Override public final void writeVLFPBE(Number value) throws IOException { kout.writeVLFPBE(value); }
+	@Override public final void writeVLFPLE(Number value) throws IOException { kout.writeVLFPLE(value); }
 }
