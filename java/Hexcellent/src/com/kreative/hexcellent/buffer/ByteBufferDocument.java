@@ -2,10 +2,8 @@ package com.kreative.hexcellent.buffer;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -86,6 +84,13 @@ public class ByteBufferDocument {
 		byte[] data = getSelection();
 		if (data == null) return null;
 		try { return new String(data, charset); }
+		catch (IOException e) { return null; }
+	}
+	
+	public String getSelectionEncoded(ByteEncoder encoder) {
+		byte[] data = getSelection();
+		if (data == null) return null;
+		try { return encoder.encode(data, 0, data.length); }
 		catch (IOException e) { return null; }
 	}
 	
@@ -241,24 +246,20 @@ public class ByteBufferDocument {
 		return copyAsString(charset) && deleteSelection("Cut");
 	}
 	
+	public boolean cutEncoded(ByteEncoder encoder) {
+		return copyEncoded(encoder) && deleteSelection("Cut");
+	}
+	
 	public boolean copyAsHex() {
-		String s = getSelectionAsHex();
-		if (s == null) return false;
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		Clipboard cb = tk.getSystemClipboard();
-		StringSelection ss = new StringSelection(s);
-		cb.setContents(ss, OWNER);
-		return true;
+		return setClipboardString(getSelectionAsHex());
 	}
 	
 	public boolean copyAsString(String charset) {
-		String s = getSelectionAsString(charset);
-		if (s == null) return false;
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		Clipboard cb = tk.getSystemClipboard();
-		StringSelection ss = new StringSelection(s);
-		cb.setContents(ss, OWNER);
-		return true;
+		return setClipboardString(getSelectionAsString(charset));
+	}
+	
+	public boolean copyEncoded(ByteEncoder encoder) {
+		return setClipboardString(getSelectionEncoded(encoder));
 	}
 	
 	public boolean pasteAsHex() {
@@ -273,6 +274,13 @@ public class ByteBufferDocument {
 		String s = getClipboardString();
 		if (s == null) return false;
 		try { return replaceSelection("Paste", s.getBytes(charset), false); }
+		catch (IOException e) { return false; }
+	}
+	
+	public boolean pasteDecoded(ByteDecoder decoder) {
+		String s = getClipboardString();
+		if (s == null) return false;
+		try { return replaceSelection("Paste", decoder.decode(s), false); }
 		catch (IOException e) { return false; }
 	}
 	
@@ -552,6 +560,15 @@ public class ByteBufferDocument {
 		return false;
 	}
 	
+	private static boolean setClipboardString(String s) {
+		if (s == null) return false;
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Clipboard cb = tk.getSystemClipboard();
+		StringSelection ss = new StringSelection(s);
+		cb.setContents(ss, ss);
+		return true;
+	}
+	
 	private static String getClipboardString() {
 		try {
 			Toolkit tk = Toolkit.getDefaultToolkit();
@@ -619,12 +636,5 @@ public class ByteBufferDocument {
 		"D0","D1","D2","D3","D4","D5","D6","D7","D8","D9","DA","DB","DC","DD","DE","DF",
 		"E0","E1","E2","E3","E4","E5","E6","E7","E8","E9","EA","EB","EC","ED","EE","EF",
 		"F0","F1","F2","F3","F4","F5","F6","F7","F8","F9","FA","FB","FC","FD","FE","FF",
-	};
-	
-	private static final ClipboardOwner OWNER = new ClipboardOwner() {
-		@Override
-		public void lostOwnership(Clipboard cb, Transferable t) {
-			// Nothing.
-		}
 	};
 }

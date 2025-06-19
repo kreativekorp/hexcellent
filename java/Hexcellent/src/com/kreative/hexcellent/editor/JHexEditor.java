@@ -26,20 +26,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JViewport;
 import javax.swing.Scrollable;
-import com.kreative.hexcellent.buffer.ArrayByteBuffer;
-import com.kreative.hexcellent.buffer.BitTransform;
-import com.kreative.hexcellent.buffer.ByteBuffer;
-import com.kreative.hexcellent.buffer.ByteBufferDocument;
-import com.kreative.hexcellent.buffer.ByteBufferHistory;
-import com.kreative.hexcellent.buffer.ByteBufferListener;
-import com.kreative.hexcellent.buffer.ByteBufferSelectionListener;
-import com.kreative.hexcellent.buffer.ByteBufferSelectionModel;
-import com.kreative.hexcellent.buffer.ByteTransform;
-import com.kreative.hexcellent.buffer.CompositeByteBuffer;
-import com.kreative.hexcellent.buffer.IncrementTransform;
-import com.kreative.hexcellent.buffer.RandomTransform;
-import com.kreative.hexcellent.buffer.ReverseTransform;
-import com.kreative.hexcellent.buffer.RotateTransform;
+import com.kreative.hexcellent.buffer.*;
 
 public class JHexEditor extends JComponent implements Scrollable {
 	private static final long serialVersionUID = 1L;
@@ -254,6 +241,7 @@ public class JHexEditor extends JComponent implements Scrollable {
 	public byte[] getSelection() { return document.getSelection(); }
 	public String getSelectionAsHex() { return document.getSelectionAsHex(); }
 	public String getSelectionAsString() { return document.getSelectionAsString(charset); }
+	public String getSelectionEncoded(ByteEncoder encoder) { return document.getSelectionEncoded(encoder); }
 	public boolean deleteSelection(String actionName) { return !readOnly && document.deleteSelection(actionName); }
 	public boolean replaceSelection(String actionName, byte[] data, boolean keepSelected) { return !readOnly && document.replaceSelection(actionName, data, keepSelected); }
 	public boolean transformSelection(ByteTransform tx) { return !readOnly && document.transformSelection(tx); }
@@ -264,12 +252,18 @@ public class JHexEditor extends JComponent implements Scrollable {
 	public boolean cut() { return textActive ? cutAsString() : cutAsHex(); }
 	public boolean cutAsHex() { return !readOnly && document.cutAsHex(); }
 	public boolean cutAsString() { return !readOnly && document.cutAsString(charset); }
+	public boolean cutAsString(String charset) { return !readOnly && document.cutAsString(charset); }
+	public boolean cutEncoded(ByteEncoder encoder) { return !readOnly && document.cutEncoded(encoder); }
 	public boolean copy() { return textActive ? copyAsString() : copyAsHex(); }
 	public boolean copyAsHex() { return document.copyAsHex(); }
 	public boolean copyAsString() { return document.copyAsString(charset); }
+	public boolean copyAsString(String charset) { return document.copyAsString(charset); }
+	public boolean copyEncoded(ByteEncoder encoder) { return document.copyEncoded(encoder); }
 	public boolean paste() { return textActive ? pasteAsString() : pasteAsHex(); }
 	public boolean pasteAsHex() { return !readOnly && document.pasteAsHex(); }
 	public boolean pasteAsString() { return !readOnly && document.pasteAsString(charset); }
+	public boolean pasteAsString(String charset) { return !readOnly && document.pasteAsString(charset); }
+	public boolean pasteDecoded(ByteDecoder decoder) { return !readOnly && document.pasteDecoded(decoder); }
 	
 	public String getSelectionRange() {
 		long ss = document.getSelectionStart();
