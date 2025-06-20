@@ -15,7 +15,7 @@ import com.kreative.hexcellent.editor.JHexEditor;
 public class EditMenu extends JMenu {
 	private static final long serialVersionUID = 1L;
 	
-	public EditMenu(JHexEditor editor) {
+	public EditMenu(EditorFrame f, JHexEditor editor) {
 		super("Edit");
 		add(new UndoMenuItem(editor));
 		add(new RedoMenuItem(editor));
@@ -28,6 +28,7 @@ public class EditMenu extends JMenu {
 		add(new CutAsMenu(editor));
 		add(new CopyAsMenu(editor));
 		add(new PasteAsMenu(editor));
+		add(new GenerateMenuItem(f, editor));
 		addSeparator();
 		add(new SelectAllMenuItem(editor));
 		add(new GoToAddressMenuItem(editor));
@@ -276,6 +277,20 @@ public class EditMenu extends JMenu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					editor.deleteSelection("Clear");
+				}
+			});
+		}
+	}
+	
+	public static class GenerateMenuItem extends JMenuItem {
+		private static final long serialVersionUID = 1L;
+		public GenerateMenuItem(final EditorFrame f, final JHexEditor editor) {
+			super("Generate...");
+			addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					byte[] data = new GenerateDialog(f).showDialog();
+					if (data != null) editor.replaceSelection("Generate", data, true);
 				}
 			});
 		}
