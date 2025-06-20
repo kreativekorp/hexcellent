@@ -289,7 +289,13 @@ public class EditMenu extends JMenu {
 			addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					byte[] data = new GenerateDialog(f).showDialog();
+					long len = editor.getSelectionLength();
+					if (len <= 0 || len >= Integer.MAX_VALUE) len = 256;
+					String lenStr = (
+						editor.getDecimalAddresses() ? Long.toString(len) :
+						("0x" + Long.toHexString(len).toUpperCase())
+					);
+					byte[] data = new GenerateDialog(f, lenStr).showDialog();
 					if (data != null) editor.replaceSelection("Generate", data, true);
 				}
 			});

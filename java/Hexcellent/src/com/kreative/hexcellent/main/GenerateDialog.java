@@ -39,25 +39,25 @@ public class GenerateDialog extends JDialog {
 	private JButton cancelButton;
 	private byte[] data;
 	
-	public GenerateDialog(Dialog parent) {
+	public GenerateDialog(Dialog parent, String defaultCount) {
 		super(parent, "Generate");
 		setModal(true);
-		make();
+		make(defaultCount);
 	}
 	
-	public GenerateDialog(Frame parent) {
+	public GenerateDialog(Frame parent, String defaultCount) {
 		super(parent, "Generate");
 		setModal(true);
-		make();
+		make(defaultCount);
 	}
 	
-	public GenerateDialog(Window parent) {
+	public GenerateDialog(Window parent, String defaultCount) {
 		super(parent, "Generate");
 		setModal(true);
-		make();
+		make(defaultCount);
 	}
 	
-	private void make() {
+	private void make(String defaultCount) {
 		randomButton = new JRadioButton("Random");
 		beButton = new JRadioButton("Sequential (Big-Endian)");
 		leButton = new JRadioButton("Sequential (Little-Endian)");
@@ -66,7 +66,7 @@ public class GenerateDialog extends JDialog {
 		intButton = new JRadioButton("Words (32-Bit)");
 		startValue = new JTextField("0");
 		incValue = new JTextField("0");
-		count = new JTextField("0x100");
+		count = new JTextField(defaultCount);
 		okButton = new JButton("OK");
 		cancelButton = new JButton("Cancel");
 		
