@@ -60,9 +60,7 @@ public class ASCII85InputStream extends InputStream {
 	}
 	
 	public ASCII85InputStream(InputStream in, String alphabet, char x, char y, char z, char t) {
-		this.ci = null;
-		this.in = in;
-		this.alphabet = alphabet;
+		this.ci = null; this.in = in; this.alphabet = alphabet;
 		if (this.alphabet.length() != 85) throw new IllegalArgumentException(alphabet);
 		this.xb = (x > '\u0000' && x < '\uFFFD'); this.xc = x;
 		this.yb = (y > '\u0000' && y < '\uFFFD'); this.yc = y;
