@@ -1,0 +1,430 @@
+package com.kreative.templature.test;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.math.BigInteger;
+import com.kreative.templature.template.BufferedCountedInputStream;
+import com.kreative.templature.template.BufferedCountedOutputStream;
+import com.kreative.templature.template.Closure;
+import com.kreative.templature.template.item.Base128Item;
+
+public class Base128OutputTest extends AbstractTest {
+	private static final class B128TestCase {
+		public final BigInteger value;
+		public final byte[] ubeb128;
+		public final byte[] sbeb128;
+		public final byte[] uleb128;
+		public final byte[] sleb128;
+		public B128TestCase(int value, int[] ubeb128, int[] sbeb128, int[] uleb128, int[] sleb128) {
+			this.value = BigInteger.valueOf(value);
+			this.ubeb128 = new byte[ubeb128.length];
+			for (int i = 0; i < ubeb128.length; i++) this.ubeb128[i] = (byte)ubeb128[i];
+			this.sbeb128 = new byte[sbeb128.length];
+			for (int i = 0; i < sbeb128.length; i++) this.sbeb128[i] = (byte)sbeb128[i];
+			this.uleb128 = new byte[uleb128.length];
+			for (int i = 0; i < uleb128.length; i++) this.uleb128[i] = (byte)uleb128[i];
+			this.sleb128 = new byte[sleb128.length];
+			for (int i = 0; i < sleb128.length; i++) this.sleb128[i] = (byte)sleb128[i];
+		}
+	}
+	
+	private static final B128TestCase[] B128_TESTS = {
+		new B128TestCase(
+			-0x8000000,
+			new int[]{0xC0, 0x80, 0x80, 0x00},
+			new int[]{0xC0, 0x80, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x80, 0x40},
+			new int[]{0x80, 0x80, 0x80, 0x40}
+		),
+		new B128TestCase(
+			-0x7E00001,
+			new int[]{0xC0, 0xFF, 0xFF, 0x7F},
+			new int[]{0xC0, 0xFF, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0xFF, 0x40},
+			new int[]{0xFF, 0xFF, 0xFF, 0x40}
+		),
+		new B128TestCase(
+			-0x0200000,
+			new int[]{0x80, 0x80, 0x00},
+			new int[]{0xFF, 0x80, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x80, 0x7F}
+		),
+		new B128TestCase(
+			-0x0100000,
+			new int[]{0xC0, 0x80, 0x00},
+			new int[]{0xC0, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x40},
+			new int[]{0x80, 0x80, 0x40}
+		),
+		new B128TestCase(
+			-0x00FC001,
+			new int[]{0xC0, 0xFF, 0x7F},
+			new int[]{0xC0, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0x40},
+			new int[]{0xFF, 0xFF, 0x40}
+		),
+		new B128TestCase(
+			-0x0004000,
+			new int[]{0x80, 0x00},
+			new int[]{0xFF, 0x80, 0x00},
+			new int[]{0x80, 0x00},
+			new int[]{0x80, 0x80, 0x7F}
+		),
+		new B128TestCase(
+			-0x0002000,
+			new int[]{0xC0, 0x00},
+			new int[]{0xC0, 0x00},
+			new int[]{0x80, 0x40},
+			new int[]{0x80, 0x40}
+		),
+		new B128TestCase(
+			-0x0001F81,
+			new int[]{0xC0, 0x7F},
+			new int[]{0xC0, 0x7F},
+			new int[]{0xFF, 0x40},
+			new int[]{0xFF, 0x40}
+		),
+		new B128TestCase(
+			-128,
+			new int[]{0x00},
+			new int[]{0xFF, 0x00},
+			new int[]{0x00},
+			new int[]{0x80, 0x7F}
+		),
+		new B128TestCase(
+			-127,
+			new int[]{0x01},
+			new int[]{0xFF, 0x01},
+			new int[]{0x01},
+			new int[]{0x81, 0x7F}
+		),
+		new B128TestCase(
+			-66,
+			new int[]{0x3E},
+			new int[]{0xFF, 0x3E},
+			new int[]{0x3E},
+			new int[]{0xBE, 0x7F}
+		),
+		new B128TestCase(
+			-65,
+			new int[]{0x3F},
+			new int[]{0xFF, 0x3F},
+			new int[]{0x3F},
+			new int[]{0xBF, 0x7F}
+		),
+		new B128TestCase(
+			-64,
+			new int[]{0x40},
+			new int[]{0x40},
+			new int[]{0x40},
+			new int[]{0x40}
+		),
+		new B128TestCase(
+			-63,
+			new int[]{0x41},
+			new int[]{0x41},
+			new int[]{0x41},
+			new int[]{0x41}
+		),
+		new B128TestCase(
+			-2,
+			new int[]{0x7E},
+			new int[]{0x7E},
+			new int[]{0x7E},
+			new int[]{0x7E}
+		),
+		new B128TestCase(
+			-1,
+			new int[]{0x7F},
+			new int[]{0x7F},
+			new int[]{0x7F},
+			new int[]{0x7F}
+		),
+		new B128TestCase(
+			0,
+			new int[]{0x00},
+			new int[]{0x00},
+			new int[]{0x00},
+			new int[]{0x00}
+		),
+		new B128TestCase(
+			1,
+			new int[]{0x01},
+			new int[]{0x01},
+			new int[]{0x01},
+			new int[]{0x01}
+		),
+		new B128TestCase(
+			62,
+			new int[]{0x3E},
+			new int[]{0x3E},
+			new int[]{0x3E},
+			new int[]{0x3E}
+		),
+		new B128TestCase(
+			63,
+			new int[]{0x3F},
+			new int[]{0x3F},
+			new int[]{0x3F},
+			new int[]{0x3F}
+		),
+		new B128TestCase(
+			64,
+			new int[]{0x40},
+			new int[]{0x80, 0x40},
+			new int[]{0x40},
+			new int[]{0xC0, 0x00}
+		),
+		new B128TestCase(
+			65,
+			new int[]{0x41},
+			new int[]{0x80, 0x41},
+			new int[]{0x41},
+			new int[]{0xC1, 0x00}
+		),
+		new B128TestCase(
+			126,
+			new int[]{0x7E},
+			new int[]{0x80, 0x7E},
+			new int[]{0x7E},
+			new int[]{0xFE, 0x00}
+		),
+		new B128TestCase(
+			127,
+			new int[]{0x7F},
+			new int[]{0x80, 0x7F},
+			new int[]{0x7F},
+			new int[]{0xFF, 0x00}
+		),
+		new B128TestCase(
+			0x0000080,
+			new int[]{0x81, 0x00},
+			new int[]{0x81, 0x00},
+			new int[]{0x80, 0x01},
+			new int[]{0x80, 0x01}
+		),
+		new B128TestCase(
+			0x00000FF,
+			new int[]{0x81, 0x7F},
+			new int[]{0x81, 0x7F},
+			new int[]{0xFF, 0x01},
+			new int[]{0xFF, 0x01}
+		),
+		new B128TestCase(
+			0x0001F80,
+			new int[]{0xBF, 0x00},
+			new int[]{0xBF, 0x00},
+			new int[]{0x80, 0x3F},
+			new int[]{0x80, 0x3F}
+		),
+		new B128TestCase(
+			0x0001FFF,
+			new int[]{0xBF, 0x7F},
+			new int[]{0xBF, 0x7F},
+			new int[]{0xFF, 0x3F},
+			new int[]{0xFF, 0x3F}
+		),
+		new B128TestCase(
+			0x0002000,
+			new int[]{0xC0, 0x00},
+			new int[]{0x80, 0xC0, 0x00},
+			new int[]{0x80, 0x40},
+			new int[]{0x80, 0xC0, 0x00}
+		),
+		new B128TestCase(
+			0x000207F,
+			new int[]{0xC0, 0x7F},
+			new int[]{0x80, 0xC0, 0x7F},
+			new int[]{0xFF, 0x40},
+			new int[]{0xFF, 0xC0, 0x00}
+		),
+		new B128TestCase(
+			0x0003F80,
+			new int[]{0xFF, 0x00},
+			new int[]{0x80, 0xFF, 0x00},
+			new int[]{0x80, 0x7F},
+			new int[]{0x80, 0xFF, 0x00}
+		),
+		new B128TestCase(
+			0x0003FFF,
+			new int[]{0xFF, 0x7F},
+			new int[]{0x80, 0xFF, 0x7F},
+			new int[]{0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0x00}
+		),
+		new B128TestCase(
+			0x0004000,
+			new int[]{0x81, 0x80, 0x00},
+			new int[]{0x81, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x01},
+			new int[]{0x80, 0x80, 0x01}
+		),
+		new B128TestCase(
+			0x0007FFF,
+			new int[]{0x81, 0xFF, 0x7F},
+			new int[]{0x81, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0x01},
+			new int[]{0xFF, 0xFF, 0x01}
+		),
+		new B128TestCase(
+			0x00FC000,
+			new int[]{0xBF, 0x80, 0x00},
+			new int[]{0xBF, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x3F},
+			new int[]{0x80, 0x80, 0x3F}
+		),
+		new B128TestCase(
+			0x00FFFFF,
+			new int[]{0xBF, 0xFF, 0x7F},
+			new int[]{0xBF, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0x3F},
+			new int[]{0xFF, 0xFF, 0x3F}
+		),
+		new B128TestCase(
+			0x0100000,
+			new int[]{0xC0, 0x80, 0x00},
+			new int[]{0x80, 0xC0, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x40},
+			new int[]{0x80, 0x80, 0xC0, 0x00}
+		),
+		new B128TestCase(
+			0x0103FFF,
+			new int[]{0xC0, 0xFF, 0x7F},
+			new int[]{0x80, 0xC0, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0x40},
+			new int[]{0xFF, 0xFF, 0xC0, 0x00}
+		),
+		new B128TestCase(
+			0x01FC000,
+			new int[]{0xFF, 0x80, 0x00},
+			new int[]{0x80, 0xFF, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x7F},
+			new int[]{0x80, 0x80, 0xFF, 0x00}
+		),
+		new B128TestCase(
+			0x01FFFFF,
+			new int[]{0xFF, 0xFF, 0x7F},
+			new int[]{0x80, 0xFF, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0xFF, 0x00}
+		),
+		new B128TestCase(
+			0x0200000,
+			new int[]{0x81, 0x80, 0x80, 0x00},
+			new int[]{0x81, 0x80, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x80, 0x01},
+			new int[]{0x80, 0x80, 0x80, 0x01}
+		),
+		new B128TestCase(
+			0x03FFFFF,
+			new int[]{0x81, 0xFF, 0xFF, 0x7F},
+			new int[]{0x81, 0xFF, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0xFF, 0x01},
+			new int[]{0xFF, 0xFF, 0xFF, 0x01}
+		),
+		new B128TestCase(
+			0x7E00000,
+			new int[]{0xBF, 0x80, 0x80, 0x00},
+			new int[]{0xBF, 0x80, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x80, 0x3F},
+			new int[]{0x80, 0x80, 0x80, 0x3F}
+		),
+		new B128TestCase(
+			0x7FFFFFF,
+			new int[]{0xBF, 0xFF, 0xFF, 0x7F},
+			new int[]{0xBF, 0xFF, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0xFF, 0x3F},
+			new int[]{0xFF, 0xFF, 0xFF, 0x3F}
+		),
+		new B128TestCase(
+			0x8000000,
+			new int[]{0xC0, 0x80, 0x80, 0x00},
+			new int[]{0x80, 0xC0, 0x80, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x80, 0x40},
+			new int[]{0x80, 0x80, 0x80, 0xC0, 0x00}
+		),
+		new B128TestCase(
+			0x81FFFFF,
+			new int[]{0xC0, 0xFF, 0xFF, 0x7F},
+			new int[]{0x80, 0xC0, 0xFF, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0xFF, 0x40},
+			new int[]{0xFF, 0xFF, 0xFF, 0xC0, 0x00}
+		),
+		new B128TestCase(
+			0xFE00000,
+			new int[]{0xFF, 0x80, 0x80, 0x00},
+			new int[]{0x80, 0xFF, 0x80, 0x80, 0x00},
+			new int[]{0x80, 0x80, 0x80, 0x7F},
+			new int[]{0x80, 0x80, 0x80, 0xFF, 0x00}
+		),
+		new B128TestCase(
+			0xFFFFFFF,
+			new int[]{0xFF, 0xFF, 0xFF, 0x7F},
+			new int[]{0x80, 0xFF, 0xFF, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0xFF, 0x7F},
+			new int[]{0xFF, 0xFF, 0xFF, 0xFF, 0x00}
+		),
+		new B128TestCase(
+			624485,
+			new int[]{0xA6, 0x8E, 0x65},
+			new int[]{0xA6, 0x8E, 0x65},
+			new int[]{0xE5, 0x8E, 0x26},
+			new int[]{0xE5, 0x8E, 0x26}
+		),
+		new B128TestCase(
+			-123456,
+			new int[]{0xF8, 0xBB, 0x40},
+			new int[]{0xF8, 0xBB, 0x40},
+			new int[]{0xC0, 0xBB, 0x78},
+			new int[]{0xC0, 0xBB, 0x78}
+		),
+		new B128TestCase(
+			1973696,
+			new int[]{0xF8, 0xBB, 0x40},
+			new int[]{0x80, 0xF8, 0xBB, 0x40},
+			new int[]{0xC0, 0xBB, 0x78},
+			new int[]{0xC0, 0xBB, 0xF8, 0x00}
+		),
+	};
+	
+	private static BufferedCountedInputStream emptyStream() {
+		return new BufferedCountedInputStream(new ByteArrayInputStream(new byte[0]));
+	}
+	
+	public void run() throws Exception {
+		for (B128TestCase td : B128_TESTS) {
+			ByteArrayOutputStream bs = new ByteArrayOutputStream();
+			BufferedCountedOutputStream os = new BufferedCountedOutputStream(bs);
+			Base128Item item = new Base128Item(0, "", "", false, false, 10);
+			Base128Item.Instance inst = item.read(new Closure(null), emptyStream());
+			inst.setValue(td.value); inst.write(os); os.close();
+			expectEquals(td.value, bs.toByteArray(), td.ubeb128);
+			
+			bs = new ByteArrayOutputStream();
+			os = new BufferedCountedOutputStream(bs);
+			item = new Base128Item(0, "", "", false, true, 10);
+			inst = item.read(new Closure(null), emptyStream());
+			inst.setValue(td.value); inst.write(os); os.close();
+			expectEquals(td.value, bs.toByteArray(), td.sbeb128);
+			
+			bs = new ByteArrayOutputStream();
+			os = new BufferedCountedOutputStream(bs);
+			item = new Base128Item(0, "", "", true, false, 10);
+			inst = item.read(new Closure(null), emptyStream());
+			inst.setValue(td.value); inst.write(os); os.close();
+			expectEquals(td.value, bs.toByteArray(), td.uleb128);
+			
+			bs = new ByteArrayOutputStream();
+			os = new BufferedCountedOutputStream(bs);
+			item = new Base128Item(0, "", "", true, true, 10);
+			inst = item.read(new Closure(null), emptyStream());
+			inst.setValue(td.value); inst.write(os); os.close();
+			expectEquals(td.value, bs.toByteArray(), td.sleb128);
+		}
+	}
+	
+	public static void main(String[] args) {
+		new Base128OutputTest().main();
+	}
+}
