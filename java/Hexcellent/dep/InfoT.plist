@@ -7,35 +7,35 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>Hexcellent</string>
+	<string>Templature</string>
 	<key>CFBundleGetInfoString</key>
-	<string>© 2008-2026 Kreative Software</string>
+	<string>© 2025-2026 Kreative Software</string>
 	<key>CFBundleIconFile</key>
-	<string>Hexcellent.icns</string>
+	<string>templature.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.kreative.hexcellent</string>
+	<string>com.kreative.templature</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Hexcellent</string>
+	<string>Templature</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
+	<string>1.0</string>
 	<key>CFBundleSignature</key>
-	<string>jHEX</string>
+	<string>°L8R</string>
 	<key>CFBundleVersion</key>
-	<string>1.1</string>
+	<string>1.0</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>JavaX</key>
 	<dict>
 		<key>ClassPath</key>
-		<string>$JAVAROOT/hexcellent.jar:$JAVAROOT/ual.jar</string>
+		<string>$JAVAROOT/templature.jar:$JAVAROOT/ual.jar</string>
 		<key>JVMVersion</key>
 		<string>1.5+</string>
 		<key>MainClass</key>
-		<string>com.kreative.hexcellent.main.Main</string>
+		<string>com.kreative.templature.main.Main</string>
 		<key>Properties</key>
 		<dict>
 			<key>apple.laf.useScreenMenuBar</key>
@@ -48,6 +48,25 @@
 	</dict>
 	<key>CFBundleDocumentTypes</key>
 	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>tmpl</string>
+				<string>tmplt</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Templature Template</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>TMPL</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>

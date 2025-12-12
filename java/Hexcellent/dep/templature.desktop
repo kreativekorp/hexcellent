@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Encoding=UTF-8
+Name=Templature
+Comment=Edit binary files using templates
+Exec=java -jar /usr/local/lib/templature.jar %F
+Icon=/usr/share/icons/hicolor/256x256/apps/templature.png
+Terminal=false
+Type=Application
+Categories=Development;
