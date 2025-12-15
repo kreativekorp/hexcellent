@@ -3,9 +3,22 @@ package com.kreative.templature.template;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public final class Template extends ArrayList<TemplateItem> implements TemplateItem {
 	private static final long serialVersionUID = 1L;
+	
+	public Template() {
+		super();
+	}
+	
+	public Template(Collection<? extends TemplateItem> c) {
+		super(c);
+	}
+	
+	public Template(int initialCapacity) {
+		super(initialCapacity);
+	}
 	
 	public Instance read(Closure closure, BufferedCountedInputStream in) throws IOException {
 		Instance inst = new Instance(this.size());
