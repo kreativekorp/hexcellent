@@ -91,7 +91,8 @@ public class TemplateInstanceEditorFrame extends JFrame {
 		);
 		
 		setContentPane(s);
-		setSize(600, 400);
+		setJMenuBar(new EditorMenuBar(this));
+		setSize(Math.max(600, getPreferredSize().width), 400);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		updateWindow();

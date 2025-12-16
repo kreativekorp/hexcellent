@@ -48,8 +48,8 @@ public class TextTemplateFactory {
 				.getField("TEXT")
 				.get(null)
 			)) registerItemFactory((TextTemplateItemFactory)o);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 	}
 	
@@ -60,8 +60,8 @@ public class TextTemplateFactory {
 				.getMethod("load", Class.class)
 				.invoke(null, TextTemplateItemFactory.class)
 			)) registerItemFactory((TextTemplateItemFactory)o);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 	}
 	

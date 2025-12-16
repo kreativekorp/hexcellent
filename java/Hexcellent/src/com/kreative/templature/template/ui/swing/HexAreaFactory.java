@@ -9,6 +9,6 @@ public abstract class HexAreaFactory {
 	private static final String CLASSNAME = "com.kreative.templature.template.ui.ext.jhex.JHexEditorFactory";
 	public static HexAreaFactory newInstance() {
 		try { return HexAreaFactory.class.cast(Class.forName(CLASSNAME).newInstance()); }
-		catch (Exception e) { return new JHexAreaFactory(); }
+		catch (Throwable t) { return new JHexAreaFactory(); }
 	}
 }

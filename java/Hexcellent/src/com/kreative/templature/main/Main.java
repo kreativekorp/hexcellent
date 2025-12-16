@@ -18,18 +18,22 @@ import com.kreative.templature.template.TemplateException;
 public class Main {
 	public static void main(String[] args) {
 		if (args.length == 0) {
-			List<OpenRequest> list = parseOpenRequests(args);
-			if (list == null) printMainHelp();
-			else executeOpenRequests(list);
+			initGUI();
+			newTemplateEditor(null);
 		} else {
 			String arg0 = args[0].toLowerCase();
 			List<String> arga = Arrays.asList(args);
 			arga = arga.subList(1, arga.size());
 			String[] argz = arga.toArray(new String[arga.size()]);
 			if (arg0.equals("edit")) {
-				List<OpenRequest> list = parseOpenRequests(argz);
-				if (list == null) printEditHelp();
-				else executeOpenRequests(list);
+				if (argz.length == 0) {
+					initGUI();
+					newTemplateEditor(null);
+				} else {
+					List<OpenRequest> list = parseOpenRequests(argz);
+					if (list == null) printEditHelp();
+					else executeOpenRequests(list);
+				}
 			} else if (arg0.equals("compile")) {
 				CompileTemplate.main(argz);
 			} else if (arg0.equals("decompile")) {
@@ -215,7 +219,7 @@ public class Main {
 		
 		if (SwingUtils.IS_MAC_OS) {
 			try { Class.forName("com.kreative.templature.main.mac.MyApplicationListener").newInstance(); }
-			catch (Exception e) { e.printStackTrace(); }
+			catch (Throwable t) { t.printStackTrace(); }
 		}
 	}
 	

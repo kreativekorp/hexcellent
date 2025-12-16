@@ -31,8 +31,8 @@ public class MyApplicationListener {
 				cls.getMethod("setQuitHandler", QuitHandler.class).invoke(instance, quit);
 				System.out.println("Registered app event handlers through " + classAndMethodName[0]);
 				return;
-			} catch (Exception e) {
-				System.out.println("Failed to register app event handlers through " + classAndMethodName[0] + ": " + e);
+			} catch (Throwable t) {
+				System.out.println("Failed to register app event handlers through " + classAndMethodName[0] + ": " + t);
 			}
 		}
 	}

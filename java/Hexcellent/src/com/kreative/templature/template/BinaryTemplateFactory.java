@@ -57,8 +57,8 @@ public class BinaryTemplateFactory {
 				.getField("BINARY")
 				.get(null)
 			)) registerItemFactory((BinaryTemplateItemFactory)o);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 	}
 	
@@ -69,8 +69,8 @@ public class BinaryTemplateFactory {
 				.getMethod("load", Class.class)
 				.invoke(null, BinaryTemplateItemFactory.class)
 			)) registerItemFactory((BinaryTemplateItemFactory)o);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 	}
 	

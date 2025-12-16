@@ -126,6 +126,7 @@ public class TemplateEditorFrame extends JFrame {
 	private boolean textMode;
 	private boolean changed = false;
 	private boolean compiled = false;
+	private boolean eventLock = false;
 	
 	public TemplateEditorFrame(Boolean text) throws IOException {
 		if (text == null) text = false;
@@ -193,7 +194,8 @@ public class TemplateEditorFrame extends JFrame {
 		cardLayout.show(cardPanel, textMode ? "text" : "binary");
 		
 		setContentPane(cardPanel);
-		setSize(600, 400);
+		setJMenuBar(new EditorMenuBar(this));
+		setSize(Math.max(600, getPreferredSize().width), 400);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		updateWindow();
@@ -304,7 +306,9 @@ public class TemplateEditorFrame extends JFrame {
 			ttout.flush();
 			ttout.close();
 			sourceText = tout.toString();
+			eventLock = true;
 			sourceTextArea.setText(sourceText);
+			eventLock = false;
 			compiled = true;
 			return true;
 		} catch (TemplateException te) {
@@ -376,6 +380,7 @@ public class TemplateEditorFrame extends JFrame {
 	private final ClosureListener closureListener = new ClosureListener() {
 		@Override
 		public void valueChanged(ClosureItem item) {
+			if (eventLock) return;
 			compiled = false;
 			if (changed) return;
 			changed = true;
@@ -386,6 +391,7 @@ public class TemplateEditorFrame extends JFrame {
 	private final DocumentListener documentListener = new DocumentListener() {
 		@Override
 		public void insertUpdate(DocumentEvent e) {
+			if (eventLock) return;
 			compiled = false;
 			if (changed) return;
 			changed = true;
@@ -393,6 +399,7 @@ public class TemplateEditorFrame extends JFrame {
 		}
 		@Override
 		public void removeUpdate(DocumentEvent e) {
+			if (eventLock) return;
 			compiled = false;
 			if (changed) return;
 			changed = true;
@@ -400,6 +407,7 @@ public class TemplateEditorFrame extends JFrame {
 		}
 		@Override
 		public void changedUpdate(DocumentEvent e) {
+			if (eventLock) return;
 			compiled = false;
 			if (changed) return;
 			changed = true;

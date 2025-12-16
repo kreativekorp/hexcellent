@@ -47,7 +47,7 @@ public class Main {
 		
 		if (SwingUtils.IS_MAC_OS) {
 			try { Class.forName("com.kreative.hexcellent.main.mac.MyApplicationListener").newInstance(); }
-			catch (Exception e) { e.printStackTrace(); }
+			catch (Throwable t) { t.printStackTrace(); }
 		}
 	}
 	
