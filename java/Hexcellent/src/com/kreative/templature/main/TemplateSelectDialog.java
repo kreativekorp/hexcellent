@@ -12,7 +12,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.TreeSet;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -22,6 +21,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListModel;
 import com.kreative.templature.template.Template;
 import com.kreative.templature.template.TemplateException;
 
@@ -72,7 +72,11 @@ public class TemplateSelectDialog extends JDialog {
 		);
 		
 		TreeSet<String> keys = new TreeSet<String>(loader.keySet());
-		if (meta) keys.addAll(Arrays.asList(META_AUTO, META_BINARY, META_TEXT));
+		if (meta) {
+			if (name != null) keys.add(META_AUTO);
+			keys.add(META_BINARY);
+			keys.add(META_TEXT);
+		}
 		list = new JList(keys.toArray(new String[keys.size()]));
 		
 		okButton = new JButton("OK");
@@ -105,6 +109,17 @@ public class TemplateSelectDialog extends JDialog {
 		setResizable(false);
 		pack();
 		setLocationRelativeTo(null);
+		
+		if (name != null) {
+			int o = name.lastIndexOf('.');
+			String ext = name.substring(o + 1);
+			if (meta) {
+				if (ext.equalsIgnoreCase("tmpl")) ext = "TMPL (binary)";
+				else if (ext.equalsIgnoreCase("tmplt")) ext = "TMPL (text)";
+			}
+			setSelectedTemplateName(ext);
+			okButton.requestFocusInWindow();
+		}
 		
 		list.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -175,6 +190,33 @@ public class TemplateSelectDialog extends JDialog {
 				}
 			}
 		});
+	}
+	
+	public String getSelectedTemplateName() {
+		Object value = list.getSelectedValue();
+		if (value == null) return null;
+		return value.toString();
+	}
+	
+	private Object findListElement(String s) {
+		ListModel model = list.getModel();
+		for (int i = 0, n = model.getSize(); i < n; i++) {
+			Object e = model.getElementAt(i);
+			if (e.toString().equals(s)) {
+				return e;
+			}
+		}
+		for (int i = 0, n = model.getSize(); i < n; i++) {
+			Object e = model.getElementAt(i);
+			if (e.toString().equalsIgnoreCase(s)) {
+				return e;
+			}
+		}
+		return null;
+	}
+	
+	public void setSelectedTemplateName(String name) {
+		list.setSelectedValue(findListElement(name), true);
 	}
 	
 	public boolean isConfirmed() { return confirmed; }
