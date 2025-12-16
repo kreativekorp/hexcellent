@@ -37,6 +37,11 @@ public class Main {
 		try { options.read(); }
 		catch (Exception e) {}
 		
+		if (SwingUtils.IS_MAC_OS) {
+			try { Class.forName("com.kreative.hexcellent.main.mac.MacDummyWindow").newInstance(); }
+			catch (Throwable t) { t.printStackTrace(); }
+		}
+		
 		if (args.length == 0) {
 			newEditor();
 		} else {

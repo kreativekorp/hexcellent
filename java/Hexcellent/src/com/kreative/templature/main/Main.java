@@ -218,6 +218,11 @@ public class Main {
 		} catch (Exception e) {}
 		
 		if (SwingUtils.IS_MAC_OS) {
+			try { Class.forName("com.kreative.templature.main.mac.MacDummyWindow").newInstance(); }
+			catch (Throwable t) { t.printStackTrace(); }
+		}
+		
+		if (SwingUtils.IS_MAC_OS) {
 			try { Class.forName("com.kreative.templature.main.mac.MyApplicationListener").newInstance(); }
 			catch (Throwable t) { t.printStackTrace(); }
 		}
