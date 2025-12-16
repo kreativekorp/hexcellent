@@ -114,8 +114,8 @@ public class TemplateSelectDialog extends JDialog {
 			int o = name.lastIndexOf('.');
 			String ext = name.substring(o + 1);
 			if (meta) {
-				if (ext.equalsIgnoreCase("tmpl")) ext = "TMPL (binary)";
-				else if (ext.equalsIgnoreCase("tmplt")) ext = "TMPL (text)";
+				if (ext.equalsIgnoreCase("tmpl")) ext = META_BINARY;
+				else if (ext.equalsIgnoreCase("tmplt")) ext = META_TEXT;
 			}
 			setSelectedTemplateName(ext);
 			okButton.requestFocusInWindow();
