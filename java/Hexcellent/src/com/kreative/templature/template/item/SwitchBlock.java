@@ -94,7 +94,7 @@ public final class SwitchBlock implements TemplateItem {
 	public void print(PrintWriter out, String prefix) {
 		out.println(prefix + switchTypeString + " (" + textSwitchExprString + ") {");
 		for (int i = 0; i < caseCount; i++) {
-			out.println("\t" + caseTypeString[i] + (
+			out.println(prefix + "\t" + caseTypeString[i] + (
 				(caseExpression[i] != null) ? (" " + textCaseExprString[i] + ":") :
 				(textCaseExprString[i] == null || textCaseExprString[i].length() == 0) ? ":" :
 				(" " + TemplateUtils.escapeName(textCaseExprString[i]) + ":")
