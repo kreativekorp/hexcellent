@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="900px" height="180px" viewBox="0 0 900 180">
+<g>
+<rect x="9" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="27" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="45" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="63" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="81" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="99" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="117" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="135" y="108" fill="white" stroke="black" width="18" height="18"/>
+<text x="15" y="120.5" font-family="Arial" font-size="12">s</text>
+<text x="32.664" y="120.5" font-family="Arial" font-size="12">d</text>
+<text x="50.664" y="120.5" font-family="Arial" font-size="12">e</text>
+<text x="70.334" y="120.5" font-family="Arial" font-size="12">f</text>
+<text x="86.664" y="120.5" font-family="Arial" font-size="12">a</text>
+<text x="104.664" y="120.5" font-family="Arial" font-size="12">b</text>
+<text x="123" y="120.5" font-family="Arial" font-size="12">c</text>
+<text x="140.664" y="120.5" font-family="Arial" font-size="12">p</text>
+<polyline fill="none" stroke="black" points="162,9 18,9 18,108"/>
+<polyline fill="none" stroke="black" points="162,27 36,27 36,108"/>
+<polyline fill="none" stroke="black" points="162,45 54,45 54,108"/>
+<polyline fill="none" stroke="black" points="162,63 72,63 72,108"/>
+<polyline fill="none" stroke="black" points="81,108 90,99 126,99 135,108"/>
+<polyline fill="none" stroke="black" points="162,81 108,81 108,99"/>
+<polyline fill="none" stroke="black" points="162,99 144,99 144,108"/>
+<text x="171" y="12.5" font-family="Arial" font-size="12">sign</text>
+<text x="171" y="30.5" font-family="Arial" font-size="12">decimal</text>
+<text x="171" y="48.5" font-family="Arial" font-size="12">negative exponent</text>
+<text x="171" y="66.5" font-family="Arial" font-size="12">positive exponent</text>
+<text x="171" y="84.5" font-family="Arial" font-size="12">small leading digit (0-7)</text>
+<text x="171" y="102.5" font-family="Arial" font-size="12">fractional part</text>
+<polyline fill="none" stroke="black" points="45,126 54,135 72,135 81,126"/>
+<polyline fill="none" stroke="black" points="162,148.5 63,148.5 63,135"/>
+<text transform="translate(171 131)">
+<tspan x="0" y="0" font-family="Noto Sans" font-size="12">00</tspan>
+<tspan x="17.062" y="0" font-family="Arial" font-size="12">= zero exponent</tspan>
+<tspan x="0" y="14.4" font-family="Noto Sans" font-size="12">01</tspan>
+<tspan x="17.062" y="14.4" font-family="Arial" font-size="12">= positive exponent</tspan>
+<tspan x="0" y="28.8" font-family="Noto Sans" font-size="12">10</tspan>
+<tspan x="17.062" y="28.8" font-family="Arial" font-size="12">= negative exponent</tspan>
+<tspan x="0" y="43.2" font-family="Noto Sans" font-size="12">11</tspan>
+<tspan x="17.062" y="43.2" font-family="Arial" font-size="12">= large leading digit</tspan>
+</text>
+</g>
+<g transform="translate(306 0)">
+<rect x="9" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="27" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="45" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="63" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="81" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="99" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="117" y="108" fill="white" stroke="black" width="18" height="18"/>
+<rect x="135" y="108" fill="white" stroke="black" width="18" height="18"/>
+<text x="15" y="120.5" font-family="Arial" font-size="12">s</text>
+<text x="32.664" y="120.5" font-family="Arial" font-size="12">d</text>
+<text x="50.664" y="120.5" font-family="Arial" font-size="12">1</text>
+<text x="68.664" y="120.5" font-family="Arial" font-size="12">1</text>
+<text x="86.664" y="120.5" font-family="Arial" font-size="12">a</text>
+<text x="104.664" y="120.5" font-family="Arial" font-size="12">b</text>
+<text x="123" y="120.5" font-family="Arial" font-size="12">c</text>
+<text x="140.664" y="120.5" font-family="Arial" font-size="12">p</text>
+<polyline fill="none" stroke="black" points="162,9 18,9 18,108"/>
+<polyline fill="none" stroke="black" points="162,27 36,27 36,108"/>
+<polyline fill="none" stroke="black" points="162,45 90,45 90,108"/>
+<polyline fill="none" stroke="black" points="162,63 108,63 108,108"/>
+<polyline fill="none" stroke="black" points="162,81 126,81 126,108"/>
+<polyline fill="none" stroke="black" points="162,99 144,99 144,108"/>
+<text x="171" y="12.5" font-family="Arial" font-size="12">sign</text>
+<text x="171" y="30.5" font-family="Arial" font-size="12">decimal</text>
+<text x="171" y="48.5" font-family="Arial" font-size="12">negative exponent</text>
+<text x="171" y="66.5" font-family="Arial" font-size="12">positive exponent</text>
+<text x="171" y="84.5" font-family="Arial" font-size="12">large leading digit (8-9)</text>
+<text x="171" y="102.5" font-family="Arial" font-size="12">fractional part</text>
+<polyline fill="none" stroke="black" points="81,126 90,135 108,135 117,126"/>
+<polyline fill="none" stroke="black" points="162,148.5 99,148.5 99,135"/>
+<text transform="translate(171 131)">
+<tspan x="0" y="0" font-family="Noto Sans" font-size="12">00</tspan>
+<tspan x="17.062" y="0" font-family="Arial" font-size="12">= zero exponent</tspan>
+<tspan x="0" y="14.4" font-family="Noto Sans" font-size="12">01</tspan>
+<tspan x="17.062" y="14.4" font-family="Arial" font-size="12">= positive exponent</tspan>
+<tspan x="0" y="28.8" font-family="Noto Sans" font-size="12">10</tspan>
+<tspan x="17.062" y="28.8" font-family="Arial" font-size="12">= negative exponent</tspan>
+<tspan x="0" y="43.2" font-family="Noto Sans" font-size="12">11</tspan>
+<tspan x="17.062" y="43.2" font-family="Arial" font-size="12">= NaN</tspan>
+</text>
+</g>
+<g transform="translate(612 36)">
+<rect x="9" y="72" fill="white" stroke="black" width="18" height="18"/>
+<rect x="27" y="72" fill="white" stroke="black" width="18" height="18"/>
+<rect x="45" y="72" fill="white" stroke="black" width="18" height="18"/>
+<rect x="63" y="72" fill="white" stroke="black" width="18" height="18"/>
+<rect x="81" y="72" fill="white" stroke="black" width="18" height="18"/>
+<rect x="99" y="72" fill="white" stroke="black" width="18" height="18"/>
+<rect x="117" y="72" fill="white" stroke="black" width="18" height="18"/>
+<rect x="135" y="72" fill="white" stroke="black" width="18" height="18"/>
+<text x="15" y="84.5" font-family="Arial" font-size="12">s</text>
+<text x="32.664" y="84.5" font-family="Arial" font-size="12">d</text>
+<text x="50.664" y="84.5" font-family="Arial" font-size="12">1</text>
+<text x="68.664" y="84.5" font-family="Arial" font-size="12">1</text>
+<text x="86.664" y="84.5" font-family="Arial" font-size="12">1</text>
+<text x="104.664" y="84.5" font-family="Arial" font-size="12">1</text>
+<text x="123" y="84.5" font-family="Arial" font-size="12">c</text>
+<text x="140.664" y="84.5" font-family="Arial" font-size="12">p</text>
+<polyline fill="none" stroke="black" points="162,9 18,9 18,72"/>
+<polyline fill="none" stroke="black" points="162,27 36,27 36,72"/>
+<polyline fill="none" stroke="black" points="162,45 126,45 126,72"/>
+<polyline fill="none" stroke="black" points="162,63 144,63 144,72"/>
+<text x="171" y="12.5" font-family="Arial" font-size="12">sign</text>
+<text x="171" y="30.5" font-family="Arial" font-size="12">decimal</text>
+<text x="171" y="48.5" font-family="Arial" font-size="12">signaling</text>
+<text x="171" y="66.5" font-family="Arial" font-size="12">payload</text>
+<polyline fill="none" stroke="black" points="117,90 126,99 144,99 153,90"/>
+<polyline fill="none" stroke="black" points="162,112.5 135,112.5 135,99"/>
+<text transform="translate(171 95)">
+<tspan x="0" y="0" font-family="Noto Sans" font-size="12">00</tspan>
+<tspan x="17.062" y="0" font-family="Arial" font-size="12">= infinity</tspan>
+<tspan x="0" y="14.4" font-family="Noto Sans" font-size="12">01</tspan>
+<tspan x="17.062" y="14.4" font-family="Arial" font-size="12">= quiet NaN</tspan>
+<tspan x="0" y="28.8" font-family="Noto Sans" font-size="12">10</tspan>
+<tspan x="17.062" y="28.8" font-family="Arial" font-size="12">= canonical NaN</tspan>
+<tspan x="0" y="43.2" font-family="Noto Sans" font-size="12">11</tspan>
+<tspan x="17.062" y="43.2" font-family="Arial" font-size="12">= signaling NaN</tspan>
+</text>
+</g>
+</svg>
